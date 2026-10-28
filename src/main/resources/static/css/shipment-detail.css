@@ -1,0 +1,1506 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    background: #f5f7fa;
+
+    font-family:
+            Pretendard,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    color: #16233c;
+}
+
+body {
+    padding-bottom: 90px;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+    height: 72px;
+
+    background: #12263b;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 22px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.logo strong {
+    color: #2196ff;
+}
+
+.logo i {
+    font-size: 25px;
+}
+
+.menu-button {
+    border: 0;
+    background: transparent;
+    color: white;
+
+    font-size: 34px;
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.container {
+    width: 100%;
+    max-width: 760px;
+
+    margin: 0 auto;
+
+    padding: 18px 14px;
+}
+
+
+/* =====================================================
+   운송 SUMMARY
+===================================================== */
+
+.shipment-summary {
+    background: white;
+
+    padding: 18px;
+
+    border-radius: 16px;
+
+    margin-bottom: 14px;
+}
+
+.page-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+.page-title {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    font-weight: 700;
+    font-size: 21px;
+}
+
+.status-badge {
+    padding: 8px 18px;
+
+    background: #d8fae5;
+    color: #0baf58;
+
+    border-radius: 12px;
+
+    font-weight: 700;
+}
+
+.shipment-id {
+    font-size: 27px;
+    font-weight: 800;
+
+    margin-bottom: 6px;
+}
+
+.cargo-name {
+    color: #54657d;
+    font-size: 17px;
+
+    margin-bottom: 8px;
+}
+
+.route-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    margin-bottom: 20px;
+}
+
+.shipment-time {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    border-top: 1px solid #edf0f5;
+
+    padding-top: 15px;
+
+    font-size: 14px;
+}
+
+.shipment-time > i {
+    font-size: 25px;
+    color: #46617e;
+}
+
+.shipment-time .label {
+    display: block;
+    color: #687a91;
+
+    margin-bottom: 4px;
+}
+
+.elapsed {
+    margin-left: auto;
+
+    border-left: 1px solid #e3e8ef;
+
+    padding-left: 20px;
+
+    text-align: right;
+}
+
+.elapsed span {
+    display: block;
+    color: #687a91;
+
+    margin-bottom: 3px;
+}
+
+.elapsed strong {
+    color: #0878ff;
+    font-size: 20px;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card {
+    background: white;
+
+    border: 1px solid #e4e9f0;
+    border-radius: 16px;
+
+    margin-bottom: 14px;
+
+    padding: 14px;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    margin-bottom: 14px;
+}
+
+.card-title > div:first-child {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.card-title i {
+    color: #1379ff;
+}
+
+.legend {
+    display: flex;
+    gap: 10px;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    color: #53657c;
+}
+
+.legend span {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.legend-line {
+    width: 22px;
+    height: 4px;
+
+    background: #1677ff;
+    border-radius: 3px;
+}
+
+.dot {
+    width: 9px;
+    height: 9px;
+
+    display: inline-block;
+
+    border-radius: 50%;
+}
+
+.dot.red {
+    background: #ff414d;
+}
+
+.dot.orange {
+    background: #f5a000;
+}
+
+
+/* =====================================================
+   지도 Placeholder
+===================================================== */
+
+.map-placeholder {
+    height: 280px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+    background:
+            linear-gradient(
+                    135deg,
+                    #d9f0df,
+                    #e7f2e5 35%,
+                    #d8edf5 65%,
+                    #bfe5fb
+            );
+}
+
+.map-placeholder::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+            linear-gradient(
+                    rgba(255, 255, 255, 0.35) 1px,
+                    transparent 1px
+            ),
+            linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.35) 1px,
+                    transparent 1px
+            );
+
+    background-size: 45px 45px;
+}
+
+.route-svg {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.map-label {
+    position: absolute;
+
+    font-weight: 800;
+}
+
+.map-label.seoul {
+    left: 8%;
+    top: 56%;
+}
+
+.map-label.busan {
+    right: 6%;
+    bottom: 10%;
+}
+
+.map-event {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.map-event i {
+    font-size: 25px;
+}
+
+.map-event.start {
+    left: 17%;
+    top: 52%;
+
+    color: #1677ff;
+}
+
+.temp-event {
+    left: 42%;
+    top: 27%;
+}
+
+.temp-event span {
+    border: 1px solid #ff4555;
+    color: #ff3447;
+
+    background: white;
+
+    border-radius: 8px;
+
+    padding: 6px 8px;
+}
+
+.shock-event {
+    left: 59%;
+    top: 40%;
+}
+
+.shock-event span {
+    border: 1px solid #f59c00;
+    color: #ed9200;
+
+    background: white;
+
+    border-radius: 8px;
+
+    padding: 6px 8px;
+}
+
+.map-event.current {
+    right: 20%;
+    top: 55%;
+
+    color: #1677ff;
+}
+
+
+/* =====================================================
+   CURRENT STATUS
+===================================================== */
+
+.reference-time {
+    color: #6e7c90;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 8px;
+}
+
+.status-box {
+    min-height: 114px;
+
+    padding: 12px 8px;
+
+    border-radius: 12px;
+
+    background: #f4f8fc;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+}
+
+.status-box i {
+    font-size: 25px;
+
+    margin-bottom: 5px;
+}
+
+.status-box span {
+    color: #50627a;
+
+    font-size: 12px;
+}
+
+.status-box strong {
+    font-size: 22px;
+
+    margin: 4px 0;
+}
+
+.status-box small {
+    font-size: 10px;
+    color: #7a8797;
+}
+
+.blue {
+    color: #0878ff !important;
+}
+
+.green {
+    color: #12ae66 !important;
+}
+
+
+/* =====================================================
+   ALERT COUNTS
+===================================================== */
+
+.alert-count-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+.alert-count {
+    display: grid;
+    grid-template-columns: 40px 1fr 20px;
+
+    align-items: center;
+
+    padding: 13px;
+
+    border-radius: 12px;
+}
+
+.alert-count > i:first-child {
+    font-size: 25px;
+}
+
+.alert-count span {
+    display: block;
+
+    font-size: 12px;
+
+    color: #556479;
+}
+
+.alert-count strong {
+    display: block;
+
+    font-size: 21px;
+
+    margin-top: 2px;
+}
+
+.alert-count.temperature {
+    background: #fff1f1;
+
+    color: #f0313f;
+}
+
+.alert-count.shock {
+    background: #fff6e6;
+
+    color: #ef9700;
+}
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+.tabs {
+    display: flex;
+
+    overflow-x: auto;
+
+    background: white;
+
+    border: 1px solid #e4e9f0;
+    border-radius: 14px 14px 0 0;
+
+    margin-top: 14px;
+}
+
+.tab {
+    min-width: 90px;
+
+    padding: 14px 10px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #53667e;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.tab.active {
+    color: #0878ff;
+
+    border-bottom: 3px solid #0878ff;
+}
+
+
+/* =====================================================
+   CHART
+===================================================== */
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 14px;
+}
+
+.chart-header h3 {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+.chart-header select {
+    border: 1px solid #dce2ea;
+
+    border-radius: 8px;
+
+    padding: 7px 9px;
+
+    background: white;
+}
+
+.chart-wrapper {
+    width: 100%;
+
+    height: 280px;
+}
+
+
+/* =====================================================
+   ALERT LIST
+===================================================== */
+
+.view-all {
+    font-size: 12px;
+    color: #52647b;
+
+    font-weight: 500;
+}
+
+.alert-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.alert-row.temperature {
+    background: #fff2f2;
+
+    color: #e62b3a;
+}
+
+.alert-row.shock {
+    background: #fff6e6;
+
+    color: #e98e00;
+}
+
+.alert-message {
+    color: #4f6074;
+}
+
+
+/* =====================================================
+   BOTTOM BUTTONS
+===================================================== */
+
+.bottom-actions {
+    position: fixed;
+
+    bottom: 0;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 100%;
+    max-width: 760px;
+
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+
+    gap: 10px;
+
+    padding: 10px 14px 14px;
+
+    background:
+            linear-gradient(
+                    rgba(245,247,250,.75),
+                    #f5f7fa
+            );
+}
+
+.btn {
+    height: 54px;
+
+    border-radius: 9px;
+
+    font-size: 16px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.btn.stop {
+    background: white;
+
+    border: 1px solid #ff4857;
+
+    color: #ee303d;
+}
+
+.btn.start {
+    border: 0;
+
+    color: white;
+
+    background: #0878ff;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding: 12px 10px;
+    }
+
+    .header {
+        height: 62px;
+
+        padding: 0 16px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .shipment-id {
+        font-size: 23px;
+    }
+
+    .shipment-time {
+        align-items: flex-start;
+    }
+
+    .shipment-time strong {
+        font-size: 12px;
+    }
+
+    .elapsed {
+        padding-left: 10px;
+    }
+
+    .elapsed strong {
+        font-size: 16px;
+    }
+
+    .map-placeholder {
+        height: 250px;
+    }
+
+    .status-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .alert-count-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .legend {
+        display: none;
+    }
+
+    .alert-row {
+        grid-template-columns:
+                30px
+                72px
+                42px
+                1fr
+                15px;
+    }
+
+    .chart-wrapper {
+        height: 240px;
+    }
+}
+
+.empty-state {
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #777777;
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.logger-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+}
+
+.logger-title i {
+    font-size: 16px;
+}
+
+.logger-badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: #eef6ff;
+    color: #1677ff;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 24px 16px;
+    margin-bottom: 16px;
+
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+
+    color: #888888;
+    font-size: 13px;
+}
+
+.empty-state i {
+    font-size: 24px;
+    color: #aaaaaa;
+}
+
+.shipment-overall-status {
+    margin-top: 14px;
+}
+
+/* =====================================================
+   CURRENT STATUS
+===================================================== */
+
+.current-status-card {
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   LOGGER
+===================================================== */
+
+.logger-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.logger-panel {
+    padding: 16px;
+    border: 1px solid #e6ebf2;
+    border-radius: 14px;
+    background: #ffffff;
+}
+
+
+/* Header */
+
+.logger-panel-header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+.logger-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 14px;
+    color: #172033;
+}
+
+.logger-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: 8px;
+
+    background: #edf5ff;
+    color: #1677ff;
+}
+
+.logger-name strong {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.latest-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: #effaf4;
+    color: #18a957;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.latest-badge i {
+    font-size: 6px;
+}
+
+
+/* =====================================================
+   SENSOR GRID
+===================================================== */
+
+.sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+
+.sensor-item {
+    min-width: 0;
+    min-height: 120px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 14px 8px;
+
+    border-radius: 12px;
+    background: #f6f9fd;
+
+    text-align: center;
+}
+
+
+.sensor-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    margin-bottom: 6px;
+
+    font-size: 23px;
+}
+
+
+.sensor-label {
+    margin-bottom: 5px;
+
+    color: #68768a;
+    font-size: 12px;
+}
+
+
+.sensor-value {
+    color: #172033;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.sensor-reference {
+    margin-top: 7px;
+
+    color: #8290a3;
+    font-size: 10px;
+
+    white-space: nowrap;
+}
+
+
+/* Sensor colors */
+
+.sensor-item.temperature .sensor-icon,
+.sensor-item.temperature .sensor-value {
+    color: #1677ff;
+}
+
+.sensor-item.humidity .sensor-icon {
+    color: #1677ff;
+}
+
+.sensor-item.battery .sensor-icon,
+.sensor-item.battery .sensor-value {
+    color: #00a85a;
+}
+
+
+/* =====================================================
+   OPERATION SUMMARY
+===================================================== */
+
+.operation-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 16px;
+}
+
+
+.operation-item {
+    position: relative;
+
+    min-height: 82px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 14px;
+
+    border-radius: 12px;
+}
+
+
+.operation-icon {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    font-size: 21px;
+}
+
+
+.operation-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.operation-info span {
+    color: #68768a;
+    font-size: 11px;
+}
+
+
+.operation-info strong {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+.operation-arrow {
+    position: absolute;
+
+    right: 12px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 14px;
+}
+
+
+/* 주행 */
+
+.operation-item.driving {
+    background: #f2f7ff;
+}
+
+.operation-item.driving .operation-icon,
+.operation-item.driving strong {
+    color: #1677ff;
+}
+
+
+/* 온도 이탈 */
+
+.operation-item.temp-alert {
+    background: #fff2f2;
+}
+
+.operation-item.temp-alert .operation-icon,
+.operation-item.temp-alert strong,
+.operation-item.temp-alert .operation-arrow {
+    color: #ff3b3b;
+}
+
+
+/* 충격 */
+
+.operation-item.shock-alert {
+    background: #fff7e8;
+}
+
+.operation-item.shock-alert .operation-icon,
+.operation-item.shock-alert strong,
+.operation-item.shock-alert .operation-arrow {
+    color: #ff9500;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.sensor-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    gap: 7px;
+
+    min-height: 120px;
+    margin-top: 14px;
+
+    border: 1px dashed #d8dee8;
+    border-radius: 12px;
+
+    background: #fafbfd;
+
+    color: #8b97a8;
+    font-size: 12px;
+}
+
+.sensor-empty i {
+    font-size: 24px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .logger-panel {
+        padding: 13px;
+    }
+
+    .sensor-grid {
+        gap: 7px;
+    }
+
+    .sensor-item {
+        min-height: 112px;
+        padding: 12px 5px;
+    }
+
+    .sensor-value {
+        font-size: 19px;
+    }
+
+    .sensor-reference {
+        font-size: 9px;
+    }
+
+    .operation-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .operation-item {
+        min-height: 66px;
+    }
+
+}
+
+.logger-latest {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.measured-time {
+    color: #8a96a8;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+
+    .logger-latest {
+        gap: 6px;
+    }
+
+    .measured-time {
+        font-size: 10px;
+    }
+
+}
+
+/* =====================================================
+   ALERT LIST
+===================================================== */
+
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+
+/* 알림 한 건 */
+
+.alert-item {
+    display: grid;
+
+    /* 아이콘 | 내용 | 화살표 */
+    grid-template-columns: 42px minmax(0, 1fr) 20px;
+
+    align-items: center;
+    gap: 12px;
+
+    min-height: 88px;
+
+    padding: 15px 16px;
+
+    border-radius: 13px;
+
+    transition:
+            transform 0.15s ease,
+            background 0.15s ease;
+}
+
+
+/* 온도 */
+
+.alert-item.temperature {
+    background: #fff2f2;
+}
+
+
+/* 충격 */
+
+.alert-item.shock {
+    background: #fff7e8;
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.alert-item-icon {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    font-size: 20px;
+
+    flex-shrink: 0;
+}
+
+
+.alert-item.temperature .alert-item-icon {
+    color: #ff3b4e;
+}
+
+
+.alert-item.shock .alert-item-icon {
+    color: #ff9500;
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.alert-item-content {
+    min-width: 0;
+}
+
+
+/* 제목 영역 */
+
+.alert-item-header {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 7px;
+}
+
+
+.alert-title-group {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    min-width: 0;
+}
+
+
+/* 제목 */
+
+.alert-item-title {
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+
+.alert-item.temperature .alert-item-title {
+    color: #f02d3d;
+}
+
+
+.alert-item.shock .alert-item-title {
+    color: #ef8a00;
+}
+
+
+/* LOGGER */
+
+.alert-logger {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 3px 7px;
+
+    border-radius: 6px;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    color: #677489;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* 시간 */
+
+.alert-time {
+
+    flex-shrink: 0;
+
+    color: #8a96a8;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
+
+.alert-description {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 4px;
+
+    color: #5e6b7c;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+
+.alert-description strong {
+
+    color: #253247;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.alert-divider {
+
+    margin: 0 3px;
+
+    color: #b1bac7;
+}
+
+
+/* =====================================================
+   ARROW
+===================================================== */
+
+.alert-item-arrow {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 15px;
+}
+
+
+.alert-item.temperature .alert-item-arrow {
+    color: #ff5967;
+}
+
+
+.alert-item.shock .alert-item-arrow {
+    color: #ff9f1a;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .alert-item {
+
+        grid-template-columns: 38px minmax(0, 1fr) 16px;
+
+        gap: 10px;
+
+        padding: 14px 12px;
+
+        min-height: 84px;
+    }
+
+
+    .alert-item-icon {
+
+        width: 38px;
+        height: 38px;
+
+        font-size: 18px;
+    }
+
+
+    .alert-item-title {
+        font-size: 14px;
+    }
+
+
+    .alert-description {
+        font-size: 12px;
+    }
+
+
+    .alert-description strong {
+        font-size: 13px;
+    }
+
+
+    .alert-time {
+        font-size: 11px;
+    }
+
+}

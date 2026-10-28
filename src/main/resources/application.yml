@@ -1,0 +1,17 @@
+spring:
+  application: name=monitor-web
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://192.168.231.110:5432/totw5701
+    username: postgres
+    password: mnwise4210
+
+  thymeleaf:
+    cache: false
+
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: com.logisnine.monitorweb.dto
+  configuration:
+    map-underscore-to-camel-case: true

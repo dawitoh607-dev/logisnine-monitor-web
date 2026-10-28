@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.logisnine.monitorweb.mapper.ShipmentMapper">
+
+    <select id="findDetailById" resultType="com.logisnine.monitorweb.dto.ShipmentDetailView">
+
+        SELECT
+        s.shipment_id,
+        s.gateway_id,
+        s.cargo_name,
+        s.departure_location,
+        s.destination_location,
+        s.vehicle_number,
+        s.driver_name,
+        s.status,
+        s.started_at,
+        s.ended_at,
+
+        r.temp_min_c as temp_min,
+        r.temp_max_c as temp_max,
+        r.temp_hold_seconds,
+        r.shock_threshold_g
+
+        FROM shipments s
+        LEFT JOIN judgement_rules r
+        ON s.rule_id = r.rule_id
+
+        WHERE s.shipment_id = #{shipmentId}
+
+    </select>
+
+
+    <select id="findLatestReadings" resultType="com.logisnine.monitorweb.dto.LatestReadingView">
+            SELECT DISTINCT ON (logger_id)
+                logger_id,
+                measured_at,
+                temperature,
+                humidity,
+                ROUND(battery_pct)::INTEGER AS battery_pct
+
+            FROM readings
+
+            WHERE gateway_id = #{gatewayId}
+              AND measured_at &gt;= #{startedAt}
+            <if test="endedAt != null">
+                AND measured_at &lt;= #{endedAt}
+            </if>
+
+            ORDER BY
+                logger_id,
+                measured_at DESC,
+                reading_id DESC
+    </select>
+
+
+    <select id="findAlertsByShipmentId" resultType="com.logisnine.monitorweb.dto.ShipmentDetailView$AlertView">
+
+        SELECT
+        alert_id,
+        logger_id,
+        alert_type AS type,
+        detected_at AS occurred_at,
+        extreme_value,
+        threshold_value
+
+        FROM alerts
+
+        WHERE shipment_id = #{shipmentId}
+
+        ORDER BY detected_at DESC
+
+    </select>
+
+
+    <select id="findReadingsForChart" resultType="com.logisnine.monitorweb.dto.ReadingChartView">
+
+        SELECT
+        measured_at,
+        temperature,
+        humidity
+
+        FROM readings
+
+        WHERE gateway_id = #{gatewayId}
+        AND logger_id = #{loggerId}
+        AND measured_at &gt;= #{startedAt}
+        <if test="endedAt != null">
+            AND measured_at &lt;= #{endedAt}
+        </if>
+
+        ORDER BY measured_at ASC
+
+    </select>
+
+</mapper>
