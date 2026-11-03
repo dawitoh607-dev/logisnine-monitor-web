@@ -20,6 +20,13 @@
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="text/javascript"
+            src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e5f142083f04eaf08c8f4a10ec29a330">
+    </script>
+
+    <script th:src="@{/js/shipment-detail.js}"></script>
+
 </head>
 
 
@@ -57,10 +64,10 @@
 
         <div class="page-title-row">
 
-            <div class="page-title">
+            <a th:href="@{/shipments}" class="page-title">
                 <i class="bi bi-chevron-left"></i>
                 운송 상세
-            </div>
+            </a>
 
             <span class="status-badge"
                   th:text="${shipment.statusName}">
@@ -182,68 +189,40 @@
 
         </div>
 
+        <div class="shipment-map-wrapper">
 
-        <!-- 실제 지도 API는 이후 연결 -->
-        <div class="map-placeholder">
-
-            <svg viewBox="0 0 700 260"
-                 preserveAspectRatio="none"
-                 class="route-svg">
-
-                <polyline
-                        points="
-                        80,170
-                        170,115
-                        260,130
-                        350,90
-                        440,140
-                        550,115
-                        630,160
-                        "
-                        fill="none"
-                        stroke="#1677ff"
-                        stroke-width="7"
-                        stroke-linecap="round"
-                        stroke-linejoin="round">
-                </polyline>
-
-            </svg>
-
-
-            <div class="map-label seoul">
-                서울
-            </div>
-
-            <div class="map-label busan">
-                부산
+            <div id="shipmentMap"
+                 th:data-departure-latitude="${shipment.departureLatitude}"
+                 th:data-departure-longitude="${shipment.departureLongitude}"
+                 th:data-destination-latitude="${shipment.destinationLatitude}"
+                 th:data-destination-longitude="${shipment.destinationLongitude}"
+                 th:data-departure-name="${shipment.departureLocation}"
+                 th:data-destination-name="${shipment.destinationLocation}">
             </div>
 
 
-            <div class="map-event start">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span>출발</span>
-            </div>
+            <div class="map-legend">
 
+                <div>
+                    <span class="legend-dot departure"></span>
+                    출발
+                </div>
 
-            <div class="map-event temp-event">
-                <span>
-                    온도 이탈<br>
-                    10:15
-                </span>
-            </div>
+                <div>
+                    <span class="legend-dot destination"></span>
+                    도착
+                </div>
 
+                <div>
+                    <span class="legend-dot temperature"></span>
+                    온도 이탈
+                </div>
 
-            <div class="map-event shock-event">
-                <span>
-                    충격 감지<br>
-                    12:28
-                </span>
-            </div>
+                <div>
+                    <span class="legend-dot shock"></span>
+                    충격
+                </div>
 
-
-            <div class="map-event current">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span>현재 위치</span>
             </div>
 
         </div>
@@ -509,9 +488,9 @@
 
 
 
-    <!-- =====================================================
+    <!--&lt;!&ndash; =====================================================
          TAB
-    ====================================================== -->
+    ====================================================== &ndash;&gt;
 
     <nav class="tabs">
 
@@ -537,7 +516,7 @@
 
     </nav>
 
-
+-->
 
     <!-- =====================================================
          그래프
@@ -782,37 +761,6 @@
 
 
 </main>
-
-
-
-<!-- =====================================================
-     하단 버튼
-====================================================== -->
-
-<div class="bottom-actions">
-
-
-    <button class="btn stop">
-
-        <i class="bi bi-stop-fill"></i>
-
-        운송 종료
-
-    </button>
-
-
-    <button class="btn start">
-
-        <i class="bi bi-play-fill"></i>
-
-        운송 시작
-
-    </button>
-
-
-</div>
-
-
 
 <!-- JS -->
 <script th:src="@{/js/shipment-detail.js}"></script>

@@ -17,6 +17,12 @@ public class Shipment {
     private String departureLocation;
     private String destinationLocation;
 
+    private Double departureLatitude;
+    private Double departureLongitude;
+
+    private Double destinationLatitude;
+    private Double destinationLongitude;
+
     private String vehicleNumber;
     private String driverName;
     private String status;

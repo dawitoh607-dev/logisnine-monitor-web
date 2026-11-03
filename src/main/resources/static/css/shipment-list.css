@@ -1,0 +1,599 @@
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    background: #f5f7fa;
+
+    font-family:
+            Pretendard,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    color: #16233c;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 22px;
+
+    background: #12263b;
+    color: #ffffff;
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+
+.logo i {
+    font-size: 25px;
+}
+
+
+.logo strong {
+    color: #2196ff;
+}
+
+
+.menu-button {
+    border: 0;
+
+    background: transparent;
+    color: #ffffff;
+
+    font-size: 34px;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.container {
+    width: 100%;
+    max-width: 760px;
+
+    margin: 0 auto;
+
+    padding: 20px 14px 40px;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+
+.page-header h1 {
+    margin: 0 0 6px;
+
+    font-size: 26px;
+    font-weight: 800;
+}
+
+
+.page-header p {
+    margin: 0;
+
+    color: #758397;
+
+    font-size: 13px;
+}
+
+
+.shipment-total {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+}
+
+
+.shipment-total span {
+    color: #7a8798;
+
+    font-size: 11px;
+}
+
+
+.shipment-total strong {
+    margin-top: 2px;
+
+    color: #1677ff;
+
+    font-size: 25px;
+}
+
+
+/* =====================================================
+   STATUS FILTER
+===================================================== */
+
+.status-filter {
+    display: grid;
+
+    grid-template-columns:
+            repeat(4, 1fr);
+
+    gap: 8px;
+
+    margin-bottom: 16px;
+}
+
+
+.filter-item {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    padding: 11px 5px;
+
+    border: 1px solid #e2e7ee;
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    color: #68768a;
+
+    text-decoration: none;
+}
+
+
+.filter-item span {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+.filter-item strong {
+    font-size: 17px;
+}
+
+
+.filter-item.active {
+    border-color: #1677ff;
+
+    background: #edf5ff;
+
+    color: #1677ff;
+}
+
+
+/* =====================================================
+   SHIPMENT LIST
+===================================================== */
+
+.shipment-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+/* =====================================================
+   SHIPMENT CARD
+===================================================== */
+
+.shipment-card {
+    display: block;
+
+    padding: 17px;
+
+    border: 1px solid #e4e9f0;
+    border-radius: 15px;
+
+    background: #ffffff;
+
+    color: inherit;
+
+    text-decoration: none;
+
+    transition:
+            transform 0.15s ease,
+            box-shadow 0.15s ease;
+}
+
+
+.shipment-card:active {
+    transform: scale(0.99);
+}
+
+
+.shipment-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+}
+
+
+.shipment-number {
+    color: #607086;
+
+    font-size: 13px;
+}
+
+
+.shipment-number strong {
+    color: #16233c;
+
+    font-size: 17px;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-badge {
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.status-badge.in-progress {
+    background: #e8f7ef;
+    color: #12a45d;
+}
+
+
+.status-badge.ready {
+    background: #edf3fa;
+    color: #67778c;
+}
+
+
+.status-badge.completed {
+    background: #edf5ff;
+    color: #1677ff;
+}
+
+
+/* =====================================================
+   CARGO / ROUTE
+===================================================== */
+
+.cargo-name {
+    margin-bottom: 7px;
+
+    font-size: 19px;
+    font-weight: 800;
+}
+
+
+.route {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 13px;
+
+    color: #58697f;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.route i {
+    color: #9ba6b4;
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   META
+===================================================== */
+
+.shipment-meta {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 11px 0;
+
+    border-top: 1px solid #eef1f5;
+    border-bottom: 1px solid #eef1f5;
+}
+
+
+.shipment-meta > div {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: #66768a;
+
+    font-size: 12px;
+}
+
+
+.shipment-meta i {
+    color: #8795a7;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   EVENT SUMMARY
+===================================================== */
+
+.event-summary {
+    display: grid;
+
+    grid-template-columns:
+            1fr 1fr;
+
+    gap: 8px;
+
+    margin-top: 11px;
+}
+
+
+.event-item {
+    display: grid;
+
+    grid-template-columns:
+            24px 1fr auto;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 9px 10px;
+
+    border-radius: 9px;
+}
+
+
+.event-item i {
+    font-size: 16px;
+}
+
+
+.event-item span {
+    font-size: 11px;
+
+    color: #69778a;
+}
+
+
+.event-item strong {
+    font-size: 13px;
+}
+
+
+.event-item.temperature {
+    background: #fff2f2;
+}
+
+
+.event-item.temperature i,
+.event-item.temperature strong {
+    color: #f13b4a;
+}
+
+
+.event-item.shock {
+    background: #fff7e8;
+}
+
+
+.event-item.shock i,
+.event-item.shock strong {
+    color: #f09500;
+}
+
+
+/* =====================================================
+   PERIOD
+===================================================== */
+
+.shipment-period {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    min-height: 22px;
+
+    margin-top: 12px;
+
+    color: #7b8899;
+
+    font-size: 11px;
+}
+
+
+.shipment-period > span {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+.shipment-period strong {
+    color: #16a05b;
+}
+
+
+.card-arrow {
+    position: absolute;
+
+    right: 0;
+
+    color: #a5afbc;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-state {
+    min-height: 220px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: 1px dashed #d7dde6;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    color: #8b97a7;
+}
+
+
+.empty-state i {
+    margin-bottom: 5px;
+
+    font-size: 30px;
+}
+
+
+.empty-state strong {
+    color: #5e6d80;
+
+    font-size: 14px;
+}
+
+
+.empty-state span {
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .header {
+        height: 62px;
+
+        padding: 0 16px;
+    }
+
+
+    .logo {
+        font-size: 18px;
+    }
+
+
+    .container {
+        padding:
+                15px
+                10px
+                30px;
+    }
+
+
+    .page-header h1 {
+        font-size: 22px;
+    }
+
+
+    .page-header p {
+        font-size: 11px;
+    }
+
+
+    .shipment-total strong {
+        font-size: 22px;
+    }
+
+
+    .status-filter {
+        gap: 6px;
+    }
+
+
+    .filter-item {
+        padding:
+                9px
+                3px;
+    }
+
+
+    .filter-item span {
+        font-size: 10px;
+    }
+
+
+    .shipment-card {
+        padding: 15px;
+    }
+
+
+    .cargo-name {
+        font-size: 17px;
+    }
+
+
+    .route {
+        font-size: 13px;
+    }
+
+}

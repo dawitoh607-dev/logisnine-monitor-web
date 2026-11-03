@@ -1,28 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.logisnine.monitorweb.mapper.ShipmentMapper">
 
-    <select id="findDetailById" resultType="com.logisnine.monitorweb.dto.ShipmentDetailView">
+
+    <!-- =====================================================
+         운송 상세
+    ====================================================== -->
+
+    <select id="findDetailById"
+            resultType="com.logisnine.monitorweb.dto.ShipmentDetailView">
 
         SELECT
         s.shipment_id,
-        s.gateway_id,
+
+        (
+            SELECT a.gateway_id
+
+            FROM shipment_device_assignments a
+
+            WHERE a.shipment_id = s.shipment_id
+
+            ORDER BY
+            a.assigned_at DESC,
+            a.assignment_id DESC
+
+            LIMIT 1
+        ) AS gateway_id,
+
         s.cargo_name,
         s.departure_location,
         s.destination_location,
+
+        s.departure_latitude,
+        s.departure_longitude,
+
+        s.destination_latitude,
+        s.destination_longitude,
+
         s.vehicle_number,
         s.driver_name,
+
         s.status,
         s.started_at,
         s.ended_at,
 
-        r.temp_min_c as temp_min,
-        r.temp_max_c as temp_max,
+        r.temp_min_c AS temp_min,
+        r.temp_max_c AS temp_max,
         r.temp_hold_seconds,
         r.shock_threshold_g
 
         FROM shipments s
+
         LEFT JOIN judgement_rules r
         ON s.rule_id = r.rule_id
 
@@ -31,30 +63,67 @@
     </select>
 
 
-    <select id="findLatestReadings" resultType="com.logisnine.monitorweb.dto.LatestReadingView">
-            SELECT DISTINCT ON (logger_id)
-                logger_id,
-                measured_at,
-                temperature,
-                humidity,
-                ROUND(battery_pct)::INTEGER AS battery_pct
+    <!-- =====================================================
+         로거별 최신 측정값
+    ====================================================== -->
 
-            FROM readings
+    <select id="findLatestReadings"
+            resultType="com.logisnine.monitorweb.dto.LatestReadingView">
 
-            WHERE gateway_id = #{gatewayId}
-              AND measured_at &gt;= #{startedAt}
-            <if test="endedAt != null">
-                AND measured_at &lt;= #{endedAt}
-            </if>
+        SELECT DISTINCT ON (r.logger_id)
 
-            ORDER BY
-                logger_id,
-                measured_at DESC,
-                reading_id DESC
+        r.logger_id,
+        r.measured_at,
+        r.temperature,
+        r.humidity,
+
+        ROUND(r.battery_pct)::INTEGER AS battery_pct
+
+        FROM readings r
+
+        WHERE EXISTS
+        (
+            SELECT 1
+
+            FROM shipment_device_assignments a
+
+            WHERE a.shipment_id = #{shipmentId}
+
+            AND a.gateway_id = r.gateway_id
+
+            AND (
+                a.logger_id IS NULL
+                OR a.logger_id = r.logger_id
+            )
+
+            AND r.measured_at &gt;= a.assigned_at
+
+            AND (
+                a.unassigned_at IS NULL
+                OR r.measured_at &lt;= a.unassigned_at
+            )
+        )
+
+        AND r.measured_at &gt;= #{startedAt}
+
+        <if test="endedAt != null">
+            AND r.measured_at &lt;= #{endedAt}
+        </if>
+
+        ORDER BY
+        r.logger_id,
+        r.measured_at DESC,
+        r.reading_id DESC
+
     </select>
 
 
-    <select id="findAlertsByShipmentId" resultType="com.logisnine.monitorweb.dto.ShipmentDetailView$AlertView">
+    <!-- =====================================================
+         운송 Alert 목록
+    ====================================================== -->
+
+    <select id="findAlertsByShipmentId"
+            resultType="com.logisnine.monitorweb.dto.ShipmentDetailView$AlertView">
 
         SELECT
         alert_id,
@@ -68,29 +137,221 @@
 
         WHERE shipment_id = #{shipmentId}
 
-        ORDER BY detected_at DESC
+        ORDER BY
+        detected_at DESC
 
     </select>
 
 
-    <select id="findReadingsForChart" resultType="com.logisnine.monitorweb.dto.ReadingChartView">
+    <!-- =====================================================
+         온도 / 습도 Chart
+    ====================================================== -->
+
+    <select id="findReadingsForChart"
+            resultType="com.logisnine.monitorweb.dto.ReadingChartView">
 
         SELECT
-        measured_at,
-        temperature,
-        humidity
+        r.measured_at,
+        r.temperature,
+        r.humidity
 
-        FROM readings
+        FROM readings r
 
-        WHERE gateway_id = #{gatewayId}
-        AND logger_id = #{loggerId}
-        AND measured_at &gt;= #{startedAt}
+        WHERE r.logger_id = #{loggerId}
+
+        AND EXISTS
+        (
+            SELECT 1
+
+            FROM shipment_device_assignments a
+
+            WHERE a.shipment_id = #{shipmentId}
+
+            AND a.gateway_id = r.gateway_id
+
+            AND (
+                a.logger_id IS NULL
+                OR a.logger_id = r.logger_id
+            )
+
+            AND r.measured_at &gt;= a.assigned_at
+
+            AND (
+                a.unassigned_at IS NULL
+                OR r.measured_at &lt;= a.unassigned_at
+            )
+        )
+
+        AND r.measured_at &gt;= #{startedAt}
+
         <if test="endedAt != null">
-            AND measured_at &lt;= #{endedAt}
+            AND r.measured_at &lt;= #{endedAt}
         </if>
 
-        ORDER BY measured_at ASC
+        ORDER BY
+        r.measured_at ASC
 
     </select>
+
+
+    <!-- =====================================================
+         운행 경로
+    ====================================================== -->
+
+    <select id="findRoutePoints"
+            resultType="com.logisnine.monitorweb.dto.RoutePointView">
+
+        SELECT DISTINCT ON (r.measured_at)
+
+        r.measured_at,
+        r.latitude,
+        r.longitude
+
+        FROM readings r
+
+        WHERE EXISTS
+        (
+            SELECT 1
+
+            FROM shipment_device_assignments a
+
+            WHERE a.shipment_id = #{shipmentId}
+
+            AND a.gateway_id = r.gateway_id
+
+            AND (
+                a.logger_id IS NULL
+                OR a.logger_id = r.logger_id
+            )
+
+            AND r.measured_at &gt;= a.assigned_at
+
+            AND (
+                a.unassigned_at IS NULL
+                OR r.measured_at &lt;= a.unassigned_at
+            )
+        )
+
+        AND r.measured_at &gt;= #{startedAt}
+
+        <if test="endedAt != null">
+            AND r.measured_at &lt;= #{endedAt}
+        </if>
+
+        AND r.latitude IS NOT NULL
+
+        AND r.longitude IS NOT NULL
+
+        ORDER BY
+        r.measured_at ASC,
+        r.reading_id DESC
+
+    </select>
+
+
+    <!-- =====================================================
+         지도 Alert
+    ====================================================== -->
+
+    <select id="findMapAlerts"
+            resultType="com.logisnine.monitorweb.dto.MapAlertView">
+
+        SELECT
+        a.alert_id,
+        a.alert_type,
+        a.logger_id,
+        a.detected_at,
+        a.extreme_value,
+        a.threshold_value,
+
+        r.latitude,
+        r.longitude
+
+        FROM alerts a
+
+        JOIN readings r
+        ON r.reading_id = a.trigger_reading_id
+
+        WHERE a.shipment_id = #{shipmentId}
+
+        AND r.latitude IS NOT NULL
+
+        AND r.longitude IS NOT NULL
+
+        ORDER BY
+        a.detected_at ASC
+
+    </select>
+
+
+    <!-- =====================================================
+         운송 목록
+    ====================================================== -->
+
+    <select id="findShipmentList"
+            resultType="com.logisnine.monitorweb.dto.ShipmentListView">
+
+        SELECT
+        s.shipment_id,
+
+        (
+            SELECT a.gateway_id
+
+            FROM shipment_device_assignments a
+
+            WHERE a.shipment_id = s.shipment_id
+
+            ORDER BY
+            a.assigned_at DESC,
+            a.assignment_id DESC
+
+            LIMIT 1
+        ) AS gateway_id,
+
+        s.cargo_name,
+        s.departure_location,
+        s.destination_location,
+        s.vehicle_number,
+
+        s.status,
+        s.started_at,
+        s.ended_at,
+        s.created_at,
+
+        (
+            SELECT COUNT(*)
+
+            FROM alerts a
+
+            WHERE a.shipment_id = s.shipment_id
+
+            AND a.alert_type IN (
+            'TEMP_HIGH',
+            'TEMP_LOW'
+            )
+
+        ) AS temp_deviation_count,
+
+        (
+            SELECT COUNT(*)
+
+            FROM alerts a
+
+            WHERE a.shipment_id = s.shipment_id
+
+            AND a.alert_type = 'SHOCK'
+
+        ) AS shock_count
+
+        FROM shipments s
+
+        ORDER BY
+        s.created_at DESC,
+        s.shipment_id DESC
+
+        LIMIT 50
+
+    </select>
+
 
 </mapper>

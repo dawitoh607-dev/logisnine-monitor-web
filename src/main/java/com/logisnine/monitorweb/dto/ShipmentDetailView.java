@@ -23,6 +23,12 @@ public class ShipmentDetailView {
     private String departureLocation;
     private String destinationLocation;
 
+    private Double departureLatitude;
+    private Double departureLongitude;
+
+    private Double destinationLatitude;
+    private Double destinationLongitude;
+
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
     private String elapsedTime;

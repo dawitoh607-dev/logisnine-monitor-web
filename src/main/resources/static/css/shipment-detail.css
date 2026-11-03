@@ -19,11 +19,6 @@ body {
     color: #16233c;
 }
 
-body {
-    padding-bottom: 90px;
-}
-
-
 /* =====================================================
    HEADER
 ===================================================== */
@@ -111,6 +106,17 @@ body {
 
     font-weight: 700;
     font-size: 21px;
+
+    color: #16233c;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.page-title:hover,
+.page-title:visited,
+.page-title:active {
+    color: #16233c;
+    text-decoration: none;
 }
 
 .status-badge {
@@ -637,64 +643,6 @@ body {
 .alert-message {
     color: #4f6074;
 }
-
-
-/* =====================================================
-   BOTTOM BUTTONS
-===================================================== */
-
-.bottom-actions {
-    position: fixed;
-
-    bottom: 0;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: 100%;
-    max-width: 760px;
-
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-
-    gap: 10px;
-
-    padding: 10px 14px 14px;
-
-    background:
-            linear-gradient(
-                    rgba(245,247,250,.75),
-                    #f5f7fa
-            );
-}
-
-.btn {
-    height: 54px;
-
-    border-radius: 9px;
-
-    font-size: 16px;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.btn.stop {
-    background: white;
-
-    border: 1px solid #ff4857;
-
-    color: #ee303d;
-}
-
-.btn.start {
-    border: 0;
-
-    color: white;
-
-    background: #0878ff;
-}
-
 
 /* =====================================================
    MOBILE
@@ -1503,4 +1451,423 @@ body {
         font-size: 11px;
     }
 
+}
+
+/* =====================================================
+   MAP
+===================================================== */
+
+#shipmentMap {
+    width: 100%;
+    height: 300px;
+
+    margin-top: 14px;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    background: #eef2f6;
+}
+
+
+
+
+@media (max-width: 480px) {
+
+    #shipmentMap {
+        height: 260px;
+    }
+
+}
+
+.map-alert-popup {
+    min-width: 130px;
+    line-height: 1.6;
+    font-size: 13px;
+}
+
+.map-alert-popup strong {
+    display: block;
+    margin-bottom: 4px;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* =====================================================
+   KAKAO MAP - 출발 / 도착
+===================================================== */
+
+.kakao-location-marker {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.shipment-map-wrapper {
+    position: relative;
+
+    width: 100%;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    border: 1px solid #e2e7ee;
+
+    background: #ffffff;
+
+    box-shadow:
+            0 2px 10px rgba(22, 35, 60, 0.06);
+}
+
+
+#shipmentMap {
+    width: 100%;
+    height: 330px;
+}
+
+
+/* =====================================================
+   출발 / 도착
+===================================================== */
+
+.kakao-location-marker {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    cursor: pointer;
+
+    transform: translateY(-3px);
+}
+
+
+.location-pin {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border: 3px solid #ffffff;
+
+    border-radius:
+            50%
+            50%
+            50%
+            4px;
+
+    transform: rotate(-45deg);
+
+    box-shadow:
+            0 3px 9px
+            rgba(0, 0, 0, 0.25);
+}
+
+
+.location-pin i {
+    color: #ffffff;
+
+    font-size: 17px;
+
+    transform: rotate(45deg);
+}
+
+
+.kakao-location-marker.departure .location-pin {
+    background: #1677ff;
+}
+
+
+.kakao-location-marker.destination .location-pin {
+    background: #16a05b;
+}
+
+
+.location-label {
+    margin-top: 5px;
+
+    padding: 3px 8px;
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    color: #344258;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    box-shadow:
+            0 2px 6px
+            rgba(0, 0, 0, 0.15);
+}
+
+.location-label {
+    margin-top: 3px;
+
+    padding: 3px 8px;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #344258;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    box-shadow:
+            0 2px 6px rgba(0, 0, 0, 0.16);
+}
+
+
+/* =====================================================
+   현재 위치
+===================================================== */
+
+.kakao-current-marker {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    cursor: pointer;
+}
+
+
+.current-dot {
+    position: relative;
+
+    width: 17px;
+    height: 17px;
+
+    border: 4px solid #ffffff;
+    border-radius: 50%;
+
+    background: #1677ff;
+
+    box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.3);
+
+    z-index: 2;
+}
+
+
+.current-dot::before {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: rgba(22, 119, 255, 0.2);
+
+    transform:
+            translate(-50%, -50%);
+
+    animation:
+            current-location-pulse
+            2s infinite;
+}
+
+
+@keyframes current-location-pulse {
+
+    0% {
+        transform:
+                translate(-50%, -50%)
+                scale(0.7);
+
+        opacity: 0.9;
+    }
+
+    100% {
+        transform:
+                translate(-50%, -50%)
+                scale(1.5);
+
+        opacity: 0;
+    }
+
+}
+
+
+.current-label {
+    margin-top: 5px;
+
+    padding: 3px 7px;
+
+    border-radius: 9px;
+
+    background: #1677ff;
+
+    color: #ffffff;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    box-shadow:
+            0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =====================================================
+   ALERT
+===================================================== */
+.kakao-alert-marker {
+    width: 16px;
+    height: 16px;
+
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    box-shadow:
+            0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+
+.kakao-alert-marker.temperature {
+    background: #f04452;
+}
+
+
+.kakao-alert-marker.shock {
+    background: #f59e0b;
+}
+
+
+/* =====================================================
+   POPUP
+===================================================== */
+
+.kakao-map-popup {
+    min-width: 140px;
+
+    padding: 10px 12px;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #24334a;
+
+    font-size: 11px;
+
+    box-shadow:
+            0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+
+.kakao-map-popup strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 12px;
+}
+
+
+.kakao-map-popup .popup-text {
+    color: #6c798b;
+
+    line-height: 1.5;
+}
+
+
+.map-legend {
+    position: absolute;
+
+    left: 12px;
+    bottom: 12px;
+
+    z-index: 10;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px 10px;
+
+    max-width: calc(100% - 24px);
+
+    padding: 7px 9px;
+
+    border: 1px solid rgba(220, 226, 234, 0.9);
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.12);
+
+    backdrop-filter:
+            blur(4px);
+}
+
+
+.map-legend > div {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    color: #5f6d80;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+}
+
+
+.legend-dot.departure {
+    background: #1677ff;
+}
+
+
+.legend-dot.destination {
+    background: #16a05b;
+}
+
+
+.legend-dot.temperature {
+    background: #f04452;
+}
+
+
+.legend-dot.shock {
+    background: #f59e0b;
 }
