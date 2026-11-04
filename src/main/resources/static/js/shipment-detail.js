@@ -1,21 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    const container =
-        document.querySelector(".container");
+    const container = document.querySelector(".container");
 
-    const loggerSelect =
-        document.getElementById("loggerSelect");
+    const loggerSelect = document.getElementById("loggerSelect");
 
-    const canvas =
-        document.getElementById("temperatureChart");
+    const canvas = document.getElementById("temperatureChart");
 
     if (!container || !loggerSelect || !canvas) {
         return;
     }
 
 
-    const shipmentId =
-        container.dataset.shipmentId;
+    const shipmentId = container.dataset.shipmentId;
 
     let chart = null;
 
@@ -28,31 +24,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            const response = await fetch(
-                `/shipments/${shipmentId}/readings`
-                + `?loggerId=${encodeURIComponent(loggerId)}`
-            );
+            const response = await fetch(`/shipments/${shipmentId}/readings` + `?loggerId=${encodeURIComponent(loggerId)}`);
 
 
             if (!response.ok) {
-                throw new Error(
-                    `HTTP Error: ${response.status}`
-                );
+                throw new Error(`HTTP Error: ${response.status}`);
             }
 
 
-            const readings =
-                await response.json();
+            const readings = await response.json();
 
 
             drawChart(readings);
 
         } catch (error) {
 
-            console.error(
-                "readings 조회 실패:",
-                error
-            );
+            console.error("readings 조회 실패:", error);
 
         }
     }
@@ -67,9 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const tempMin = Number(canvas.dataset.tempMin);
         const tempMax = Number(canvas.dataset.tempMax);
 
-        const hasTempRule =
-            Number.isFinite(tempMin)
-            && Number.isFinite(tempMax);
+        const hasTempRule = Number.isFinite(tempMin) && Number.isFinite(tempMax);
 
 
         // =====================================================
@@ -93,11 +78,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // 실제 측정값
         // =====================================================
 
-        const temperatures =
-            readings.map(reading => reading.temperature);
+        const temperatures = readings.map(reading => reading.temperature);
 
-        const humidities =
-            readings.map(reading => reading.humidity);
+        const humidities = readings.map(reading => reading.humidity);
 
 
         // =====================================================
@@ -129,8 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 borderWidth: 0,
 
-                pointRadius: 0,
-                pointHoverRadius: 0,
+                pointRadius: 0, pointHoverRadius: 0,
 
                 tension: 0,
 
@@ -161,8 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 borderWidth: 0,
 
-                pointRadius: 0,
-                pointHoverRadius: 0,
+                pointRadius: 0, pointHoverRadius: 0,
 
                 tension: 0,
 
@@ -187,13 +168,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             yAxisID: "yTemperature",
 
-            borderColor: "#1677ff",
-            backgroundColor: "#1677ff",
+            borderColor: "#1677ff", backgroundColor: "#1677ff",
 
             borderWidth: 3,
 
-            pointRadius: 0,
-            pointHoverRadius: 4,
+            pointRadius: 0, pointHoverRadius: 4,
 
             tension: 0.35,
 
@@ -216,13 +195,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             yAxisID: "yHumidity",
 
-            borderColor: "#cccccc",
-            backgroundColor: "#cccccc",
+            borderColor: "#cccccc", backgroundColor: "#cccccc",
 
             borderWidth: 3,
 
-            pointRadius: 0,
-            pointHoverRadius: 4,
+            pointRadius: 0, pointHoverRadius: 4,
 
             tension: 0.35,
 
@@ -248,15 +225,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 yAxisID: "yTemperature",
 
-                borderColor: "#ff4d5a",
-                backgroundColor: "#ff4d5a",
+                borderColor: "#ff4d5a", backgroundColor: "#ff4d5a",
 
                 borderWidth: 2,
 
                 borderDash: [7, 6],
 
-                pointRadius: 0,
-                pointHoverRadius: 0,
+                pointRadius: 0, pointHoverRadius: 0,
 
                 tension: 0,
 
@@ -276,15 +251,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 yAxisID: "yTemperature",
 
-                borderColor: "#ff9500",
-                backgroundColor: "#ff9500",
+                borderColor: "#ff9500", backgroundColor: "#ff9500",
 
                 borderWidth: 2,
 
                 borderDash: [7, 6],
 
-                pointRadius: 0,
-                pointHoverRadius: 0,
+                pointRadius: 0, pointHoverRadius: 0,
 
                 tension: 0,
 
@@ -307,113 +280,63 @@ document.addEventListener("DOMContentLoaded", function () {
         // Chart 생성
         // =====================================================
 
-        chart = new Chart(
-            canvas,
-            {
+        chart = new Chart(canvas, {
 
-                type: "line",
+            type: "line",
 
 
-                data: {
+            data: {
 
-                    labels: labels,
+                labels: labels,
 
-                    datasets: datasets
+                datasets: datasets
 
+            },
+
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+
+                interaction: {
+                    mode: "index", intersect: false
                 },
 
 
-                options: {
-
-                    responsive: true,
-
-                    maintainAspectRatio: false,
+                plugins: {
 
 
-                    interaction: {
-                        mode: "index",
-                        intersect: false
-                    },
+                    // =========================================
+                    // 범례
+                    // =========================================
 
+                    legend: {
 
-                    plugins: {
+                        display: true,
 
+                        position: "top",
 
-                        // =========================================
-                        // 범례
-                        // =========================================
+                        labels: {
 
-                        legend: {
+                            usePointStyle: true,
 
-                            display: true,
+                            boxWidth: 12,
 
-                            position: "top",
+                            padding: 16,
 
-                            labels: {
-
-                                usePointStyle: true,
-
-                                boxWidth: 12,
-
-                                padding: 16,
-
-                                font: {
-                                    size: 12
-                                },
-
-
-                                // 정상범위 하단용 숨은 dataset은
-                                // 범례에서 제외
-                                filter: function (item) {
-
-                                    return !item.text.startsWith("__");
-
-                                }
-
-                            }
-
-                        },
-
-
-                        // =========================================
-                        // Tooltip
-                        // =========================================
-
-                        tooltip: {
-
-                            // 정상범위/기준선은 tooltip에서 제외
-                            filter: function (context) {
-
-                                return (
-                                    context.dataset.label === "온도 (℃)"
-                                    ||
-                                    context.dataset.label === "습도 (%)"
-                                );
-
+                            font: {
+                                size: 12
                             },
 
 
-                            callbacks: {
+                            // 정상범위 하단용 숨은 dataset은
+                            // 범례에서 제외
+                            filter: function (item) {
 
-                                label: function (context) {
-
-                                    if (context.dataset.label === "온도 (℃)") {
-
-                                        return ` 온도: ${context.parsed.y}℃`;
-
-                                    }
-
-
-                                    if (context.dataset.label === "습도 (%)") {
-
-                                        return ` 습도: ${context.parsed.y}%`;
-
-                                    }
-
-
-                                    return "";
-
-                                }
+                                return !item.text.startsWith("__");
 
                             }
 
@@ -422,122 +345,155 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
 
 
-                    // =================================================
-                    // 축
-                    // =================================================
+                    // =========================================
+                    // Tooltip
+                    // =========================================
 
-                    scales: {
+                    tooltip: {
+
+                        // 정상범위/기준선은 tooltip에서 제외
+                        filter: function (context) {
+
+                            return (context.dataset.label === "온도 (℃)" || context.dataset.label === "습도 (%)");
+
+                        },
 
 
-                        // X축
-                        x: {
+                        callbacks: {
 
-                            grid: {
-                                color: "#edf0f4"
-                            },
+                            label: function (context) {
 
-                            ticks: {
-                                color: "#68768a"
+                                if (context.dataset.label === "온도 (℃)") {
+
+                                    return ` 온도: ${context.parsed.y}℃`;
+
+                                }
+
+
+                                if (context.dataset.label === "습도 (%)") {
+
+                                    return ` 습도: ${context.parsed.y}%`;
+
+                                }
+
+
+                                return "";
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+
+                // =================================================
+                // 축
+                // =================================================
+
+                scales: {
+
+
+                    // X축
+                    x: {
+
+                        grid: {
+                            color: "#edf0f4"
+                        },
+
+                        ticks: {
+                            color: "#68768a"
+                        }
+
+                    },
+
+
+                    // 온도축
+                    yTemperature: {
+
+                        type: "linear",
+
+                        position: "left",
+
+                        suggestedMin: hasTempRule ? tempMin - 1 : undefined,
+
+                        suggestedMax: hasTempRule ? tempMax + 1 : undefined,
+
+
+                        title: {
+
+                            display: true,
+
+                            text: "온도 (℃)",
+
+                            color: "#566273",
+
+                            font: {
+                                size: 12, weight: "600"
                             }
 
                         },
 
 
-                        // 온도축
-                        yTemperature: {
+                        ticks: {
 
-                            type: "linear",
+                            color: "#68768a",
 
-                            position: "left",
-
-                            suggestedMin:
-                                hasTempRule
-                                    ? tempMin - 1
-                                    : undefined,
-
-                            suggestedMax:
-                                hasTempRule
-                                    ? tempMax + 1
-                                    : undefined,
-
-
-                            title: {
-
-                                display: true,
-
-                                text: "온도 (℃)",
-
-                                color: "#566273",
-
-                                font: {
-                                    size: 12,
-                                    weight: "600"
-                                }
-
-                            },
-
-
-                            ticks: {
-
-                                color: "#68768a",
-
-                                callback: function (value) {
-                                    return value + "°";
-                                }
-
-                            },
-
-
-                            grid: {
-
-                                color: "#e9edf2"
-
+                            callback: function (value) {
+                                return value + "°";
                             }
 
                         },
 
 
-                        // 습도축
-                        yHumidity: {
+                        grid: {
 
-                            type: "linear",
+                            color: "#e9edf2"
 
-                            position: "right",
+                        }
 
-
-                            title: {
-
-                                display: true,
-
-                                text: "습도 (%)",
-
-                                color: "#566273",
-
-                                font: {
-                                    size: 12,
-                                    weight: "600"
-                                }
-
-                            },
+                    },
 
 
-                            ticks: {
+                    // 습도축
+                    yHumidity: {
 
-                                color: "#68768a",
+                        type: "linear",
 
-                                callback: function (value) {
-                                    return value + "%";
-                                }
-
-                            },
+                        position: "right",
 
 
-                            // 오른쪽 축 Grid까지 그리면 복잡하므로 숨김
-                            grid: {
+                        title: {
 
-                                drawOnChartArea: false
+                            display: true,
 
+                            text: "습도 (%)",
+
+                            color: "#566273",
+
+                            font: {
+                                size: 12, weight: "600"
                             }
+
+                        },
+
+
+                        ticks: {
+
+                            color: "#68768a",
+
+                            callback: function (value) {
+                                return value + "%";
+                            }
+
+                        },
+
+
+                        // 오른쪽 축 Grid까지 그리면 복잡하므로 숨김
+                        grid: {
+
+                            drawOnChartArea: false
 
                         }
 
@@ -546,7 +502,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
             }
-        );
+
+        });
     }
 
 
@@ -554,14 +511,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // 로거 변경
     // =====================================================
 
-    loggerSelect.addEventListener(
-        "change",
-        function () {
+    loggerSelect.addEventListener("change", function () {
 
-            loadReadings(this.value);
+        loadReadings(this.value);
 
-        }
-    );
+    });
 
 
     // =====================================================
@@ -570,9 +524,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (loggerSelect.value) {
 
-        loadReadings(
-            loggerSelect.value
-        );
+        loadReadings(loggerSelect.value);
 
     }
 
@@ -583,10 +535,7 @@ async function loadMap(shipmentId) {
 
     try {
 
-        const [
-            routeResponse,
-            alertResponse
-        ] = await Promise.all([
+        const [routeResponse, alertResponse] = await Promise.all([
 
             fetch(`/shipments/${shipmentId}/route`),
 
@@ -597,39 +546,27 @@ async function loadMap(shipmentId) {
 
         if (!routeResponse.ok) {
 
-            throw new Error(
-                `Route HTTP Error: ${routeResponse.status}`
-            );
+            throw new Error(`Route HTTP Error: ${routeResponse.status}`);
         }
 
 
         if (!alertResponse.ok) {
 
-            throw new Error(
-                `Alert HTTP Error: ${alertResponse.status}`
-            );
+            throw new Error(`Alert HTTP Error: ${alertResponse.status}`);
         }
 
 
-        const routePoints =
-            await routeResponse.json();
+        const routePoints = await routeResponse.json();
 
-        const alerts =
-            await alertResponse.json();
+        const alerts = await alertResponse.json();
 
 
-        drawRouteMap(
-            routePoints,
-            alerts
-        );
+        drawRouteMap(routePoints, alerts);
 
 
     } catch (error) {
 
-        console.error(
-            "지도 데이터 조회 실패:",
-            error
-        );
+        console.error("지도 데이터 조회 실패:", error);
 
     }
 
@@ -637,8 +574,7 @@ async function loadMap(shipmentId) {
 
 function drawRouteMap(points, alerts) {
 
-    const mapElement =
-        document.getElementById("shipmentMap");
+    const mapElement = document.getElementById("shipmentMap");
 
     if (!mapElement) {
         return;
@@ -649,119 +585,65 @@ function drawRouteMap(points, alerts) {
     // 출발지 / 도착지
     // =====================================================
 
-    const departureLat =
-        parseMapNumber(
-            mapElement.dataset.departureLatitude
-        );
+    const departureLat = parseMapNumber(mapElement.dataset.departureLatitude);
 
-    const departureLng =
-        parseMapNumber(
-            mapElement.dataset.departureLongitude
-        );
+    const departureLng = parseMapNumber(mapElement.dataset.departureLongitude);
 
-    const destinationLat =
-        parseMapNumber(
-            mapElement.dataset.destinationLatitude
-        );
+    const destinationLat = parseMapNumber(mapElement.dataset.destinationLatitude);
 
-    const destinationLng =
-        parseMapNumber(
-            mapElement.dataset.destinationLongitude
-        );
+    const destinationLng = parseMapNumber(mapElement.dataset.destinationLongitude);
 
 
-    const departureName =
-        mapElement.dataset.departureName
-        || "출발지";
+    const departureName = mapElement.dataset.departureName || "출발지";
 
-    const destinationName =
-        mapElement.dataset.destinationName
-        || "도착지";
+    const destinationName = mapElement.dataset.destinationName || "도착지";
 
 
-    const departurePosition =
-        departureLat !== null
-        && departureLng !== null
-            ? new kakao.maps.LatLng(
-                departureLat,
-                departureLng
-            )
-            : null;
+    const departurePosition = departureLat !== null && departureLng !== null ? new kakao.maps.LatLng(departureLat, departureLng) : null;
 
 
-    const destinationPosition =
-        destinationLat !== null
-        && destinationLng !== null
-            ? new kakao.maps.LatLng(
-                destinationLat,
-                destinationLng
-            )
-            : null;
+    const destinationPosition = destinationLat !== null && destinationLng !== null ? new kakao.maps.LatLng(destinationLat, destinationLng) : null;
 
 
     // =====================================================
     // readings 경로 데이터
     // =====================================================
 
-    const routePoints =
-        (points || [])
-            .map(point => {
+    const routePoints = (points || [])
+        .map(point => {
 
-                return {
+            return {
 
-                    ...point,
+                ...point,
 
-                    latitude:
-                        Number(
-                            point.latitude
-                        ),
+                latitude: Number(point.latitude),
 
-                    longitude:
-                        Number(
-                            point.longitude
-                        )
+                longitude: Number(point.longitude)
 
-                };
+            };
 
-            })
-            .filter(point =>
+        })
+        .filter(point =>
 
-                Number.isFinite(
-                    point.latitude
-                )
+            Number.isFinite(point.latitude)
 
-                &&
+            &&
 
-                Number.isFinite(
-                    point.longitude
-                )
-
-            );
+            Number.isFinite(point.longitude));
 
 
-    const routePath =
-        routePoints.map(point =>
+    const routePath = routePoints.map(point =>
 
-            new kakao.maps.LatLng(
-                point.latitude,
-                point.longitude
-            )
-
-        );
+        new kakao.maps.LatLng(point.latitude, point.longitude));
 
 
     // =====================================================
     // 지도 데이터가 없는 경우
     // =====================================================
 
-    if (
-        !departurePosition
-        && !destinationPosition
-        && routePath.length === 0
-    ) {
+    if (!departurePosition && !destinationPosition && routePath.length === 0) {
 
-        mapElement.innerHTML =
-            `
+        mapElement.innerHTML = `
             <div class="map-empty">
                 지도 데이터가 없습니다.
             </div>
@@ -780,18 +662,15 @@ function drawRouteMap(points, alerts) {
 
     if (departurePosition) {
 
-        initialPosition =
-            departurePosition;
+        initialPosition = departurePosition;
 
     } else if (routePath.length > 0) {
 
-        initialPosition =
-            routePath[0];
+        initialPosition = routePath[0];
 
     } else {
 
-        initialPosition =
-            destinationPosition;
+        initialPosition = destinationPosition;
 
     }
 
@@ -804,33 +683,22 @@ function drawRouteMap(points, alerts) {
     // Kakao Map
     // =====================================================
 
-    const map =
-        new kakao.maps.Map(
-            mapElement,
-            {
-                center:
-                initialPosition,
+    const map = new kakao.maps.Map(mapElement, {
+        center: initialPosition,
 
-                level:
-                    7
-            }
-        );
+        level: 7
+    });
 
-    const zoomControl =
-        new kakao.maps.ZoomControl();
+    const zoomControl = new kakao.maps.ZoomControl();
 
 
-    map.addControl(
-        zoomControl,
-        kakao.maps.ControlPosition.RIGHT
-    );
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
     // =====================================================
     // 지도 범위
     // =====================================================
 
-    const bounds =
-        new kakao.maps.LatLngBounds();
+    const bounds = new kakao.maps.LatLngBounds();
 
     let boundsCount = 0;
 
@@ -841,9 +709,7 @@ function drawRouteMap(points, alerts) {
             return;
         }
 
-        bounds.extend(
-            position
-        );
+        bounds.extend(position);
 
         boundsCount++;
 
@@ -863,75 +729,52 @@ function drawRouteMap(points, alerts) {
             return;
         }
 
-        activePopup.setMap(
-            null
-        );
+        activePopup.setMap(null);
 
         activePopup = null;
 
     }
 
 
-    function showPopup(
-        position,
-        html
-    ) {
+    function showPopup(position, html) {
 
         closePopup();
 
 
-        const popup =
-            document.createElement(
-                "div"
-            );
+        const popup = document.createElement("div");
 
-        popup.className =
-            "kakao-map-popup";
+        popup.className = "kakao-map-popup";
 
-        popup.innerHTML =
-            html;
+        popup.innerHTML = html;
 
 
-        activePopup =
-            new kakao.maps.CustomOverlay({
+        activePopup = new kakao.maps.CustomOverlay({
 
-                position:
-                position,
+            position: position,
 
-                content:
-                popup,
+            content: popup,
 
-                xAnchor:
-                    0.5,
+            xAnchor: 0.5,
 
-                yAnchor:
-                    1.35,
+            yAnchor: 1.35,
 
-                zIndex:
-                    30,
+            zIndex: 30,
 
-                clickable:
-                    true
+            clickable: true
 
-            });
+        });
 
 
-        activePopup.setMap(
-            map
-        );
+        activePopup.setMap(map);
 
     }
 
 
-    kakao.maps.event.addListener(
-        map,
-        "click",
-        function () {
+    kakao.maps.event.addListener(map, "click", function () {
 
-            closePopup();
+        closePopup();
 
-        }
-    );
+    });
 
 
     // =====================================================
@@ -940,19 +783,10 @@ function drawRouteMap(points, alerts) {
 
     if (departurePosition) {
 
-        createLocationMarker(
-            map,
-            departurePosition,
-            "출발",
-            departureName,
-            "departure",
-            showPopup
-        );
+        createLocationMarker(map, departurePosition, "출발", departureName, "departure", showPopup);
 
 
-        addBounds(
-            departurePosition
-        );
+        addBounds(departurePosition);
 
     }
 
@@ -963,19 +797,10 @@ function drawRouteMap(points, alerts) {
 
     if (destinationPosition) {
 
-        createLocationMarker(
-            map,
-            destinationPosition,
-            "도착",
-            destinationName,
-            "destination",
-            showPopup
-        );
+        createLocationMarker(map, destinationPosition, "도착", destinationName, "destination", showPopup);
 
 
-        addBounds(
-            destinationPosition
-        );
+        addBounds(destinationPosition);
 
     }
 
@@ -986,43 +811,31 @@ function drawRouteMap(points, alerts) {
 
     if (routePath.length >= 2) {
 
-        const polyline =
-            new kakao.maps.Polyline({
+        const polyline = new kakao.maps.Polyline({
 
-                path:
-                routePath,
+            path: routePath,
 
-                strokeWeight:
-                    4,
+            strokeWeight: 4,
 
-                strokeColor:
-                    "#2878e8",
+            strokeColor: "#2878e8",
 
-                strokeOpacity:
-                    0.85,
+            strokeOpacity: 0.85,
 
-                strokeStyle:
-                    "solid"
+            strokeStyle: "solid"
 
-            });
+        });
 
 
-        polyline.setMap(
-            map
-        );
+        polyline.setMap(map);
 
     }
 
 
-    routePath.forEach(
-        position => {
+    routePath.forEach(position => {
 
-            addBounds(
-                position
-            );
+        addBounds(position);
 
-        }
-    );
+    });
 
 
     // =====================================================
@@ -1031,25 +844,13 @@ function drawRouteMap(points, alerts) {
 
     if (routePoints.length > 0) {
 
-        const lastReading =
-            routePoints[
-            routePoints.length - 1
-                ];
+        const lastReading = routePoints[routePoints.length - 1];
 
 
-        const currentPosition =
-            new kakao.maps.LatLng(
-                lastReading.latitude,
-                lastReading.longitude
-            );
+        const currentPosition = new kakao.maps.LatLng(lastReading.latitude, lastReading.longitude);
 
 
-        createCurrentMarker(
-            map,
-            currentPosition,
-            lastReading,
-            showPopup
-        );
+        createCurrentMarker(map, currentPosition, lastReading, showPopup);
 
     }
 
@@ -1061,43 +862,23 @@ function drawRouteMap(points, alerts) {
     (alerts || [])
         .forEach(alert => {
 
-            const latitude =
-                Number(
-                    alert.latitude
-                );
+            const latitude = Number(alert.latitude);
 
-            const longitude =
-                Number(
-                    alert.longitude
-                );
+            const longitude = Number(alert.longitude);
 
 
-            if (
-                !Number.isFinite(latitude)
-                || !Number.isFinite(longitude)
-            ) {
+            if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
                 return;
             }
 
 
-            const position =
-                new kakao.maps.LatLng(
-                    latitude,
-                    longitude
-                );
+            const position = new kakao.maps.LatLng(latitude, longitude);
 
 
-            createAlertMarker(
-                map,
-                position,
-                alert,
-                showPopup
-            );
+            createAlertMarker(map, position, alert, showPopup);
 
 
-            addBounds(
-                position
-            );
+            addBounds(position);
 
         });
 
@@ -1108,19 +889,11 @@ function drawRouteMap(points, alerts) {
 
     if (boundsCount >= 2) {
 
-        map.setBounds(
-            bounds,
-            50,
-            50,
-            50,
-            50
-        );
+        map.setBounds(bounds, 50, 50, 50, 50);
 
     } else {
 
-        map.setCenter(
-            initialPosition
-        );
+        map.setCenter(initialPosition);
 
     }
 
@@ -1136,11 +909,7 @@ function formatMapTime(value) {
     // ↓
     // 10.27 14:10
 
-    return (
-        value.substring(5, 10).replace("-", ".")
-        + " "
-        + value.substring(11, 16)
-    );
+    return (value.substring(5, 10).replace("-", ".") + " " + value.substring(11, 16));
 
 }
 
@@ -1159,11 +928,9 @@ function createAlertPopup(alert) {
 
         title = "온도 상한 이탈";
 
-        valueText =
-            `${alert.extremeValue}℃`;
+        valueText = `${alert.extremeValue}℃`;
 
-        thresholdText =
-            `상한 ${alert.thresholdValue}℃`;
+        thresholdText = `상한 ${alert.thresholdValue}℃`;
 
     }
 
@@ -1176,11 +943,9 @@ function createAlertPopup(alert) {
 
         title = "온도 하한 이탈";
 
-        valueText =
-            `${alert.extremeValue}℃`;
+        valueText = `${alert.extremeValue}℃`;
 
-        thresholdText =
-            `하한 ${alert.thresholdValue}℃`;
+        thresholdText = `하한 ${alert.thresholdValue}℃`;
 
     }
 
@@ -1193,25 +958,17 @@ function createAlertPopup(alert) {
 
         title = "충격 발생";
 
-        valueText =
-            `${alert.extremeValue}G`;
+        valueText = `${alert.extremeValue}G`;
 
-        thresholdText =
-            `기준 ${alert.thresholdValue}G`;
+        thresholdText = `기준 ${alert.thresholdValue}G`;
 
-    }
+    } else {
 
+        title = alert.alertType;
 
-    else {
+        valueText = alert.extremeValue ?? "-";
 
-        title =
-            alert.alertType;
-
-        valueText =
-            alert.extremeValue ?? "-";
-
-        thresholdText =
-            alert.thresholdValue ?? "-";
+        thresholdText = alert.thresholdValue ?? "-";
 
     }
 
@@ -1243,46 +1000,27 @@ function createAlertPopup(alert) {
 
 function parseMapNumber(value) {
 
-    if (
-        value === undefined
-        || value === null
-        || value === ""
-    ) {
+    if (value === undefined || value === null || value === "") {
         return null;
     }
 
 
-    const number =
-        Number(value);
+    const number = Number(value);
 
 
-    return Number.isFinite(number)
-        ? number
-        : null;
+    return Number.isFinite(number) ? number : null;
 
 }
 
-function createLocationMarker(
-    map,
-    position,
-    label,
-    locationName,
-    type,
-    showPopup
-) {
+function createLocationMarker(map, position, label, locationName, type, showPopup) {
 
-    const markerElement =
-        document.createElement(
-            "div"
-        );
+    const markerElement = document.createElement("div");
 
 
-    markerElement.className =
-        `kakao-location-marker ${type}`;
+    markerElement.className = `kakao-location-marker ${type}`;
 
 
-    markerElement.innerHTML =
-        `
+    markerElement.innerHTML = `
         <div class="location-pin">
 
             <i class="bi bi-geo-alt-fill"></i>
@@ -1295,78 +1033,53 @@ function createLocationMarker(
         `;
 
 
-    markerElement.addEventListener(
-        "click",
-        function (event) {
+    markerElement.addEventListener("click", function (event) {
 
-            event.stopPropagation();
+        event.stopPropagation();
 
 
-            showPopup(
-                position,
-                `
+        showPopup(position, `
                 <strong>
                     ${label}지
                 </strong>
 
                 <div class="popup-text">
-                    ${escapeHtml(
-                    locationName
-                )}
+                    ${escapeHtml(locationName)}
                 </div>
-                `
-            );
+                `);
 
-        }
-    );
+    });
 
 
     new kakao.maps.CustomOverlay({
 
-        map:
-        map,
+        map: map,
 
-        position:
-        position,
+        position: position,
 
-        content:
-        markerElement,
+        content: markerElement,
 
-        xAnchor:
-            0.5,
+        xAnchor: 0.5,
 
-        yAnchor:
-            1,
+        yAnchor: 1,
 
-        zIndex:
-            20,
+        zIndex: 20,
 
-        clickable:
-            true
+        clickable: true
 
     });
 
 }
 
-function createCurrentMarker(
-    map,
-    position,
-    reading,
-    showPopup
-) {
+function createCurrentMarker(map, position, reading, showPopup) {
 
-    const markerElement =
-        document.createElement(
-            "div"
-        );
+    const markerElement = document.createElement("div");
 
 
-    markerElement.className =
-        "kakao-current-marker";
+    markerElement.className = "kakao-current-marker";
 
 
-    markerElement.innerHTML =
-        `
+    markerElement.innerHTML = `
         <div class="current-dot"></div>
 
         <div class="current-label">
@@ -1375,123 +1088,80 @@ function createCurrentMarker(
         `;
 
 
-    markerElement.addEventListener(
-        "click",
-        function (event) {
+    markerElement.addEventListener("click", function (event) {
 
-            event.stopPropagation();
+        event.stopPropagation();
 
 
-            showPopup(
-                position,
-                `
+        showPopup(position, `
                 <strong>
                     현재 위치
                 </strong>
 
                 <div class="popup-text">
-                    ${formatMapTime(
-                    reading.measuredAt
-                )}
+                    ${formatMapTime(reading.measuredAt)}
                 </div>
-                `
-            );
+                `);
 
-        }
-    );
+    });
 
 
     new kakao.maps.CustomOverlay({
 
-        map:
-        map,
+        map: map,
 
-        position:
-        position,
+        position: position,
 
-        content:
-        markerElement,
+        content: markerElement,
 
-        xAnchor:
-            0.5,
+        xAnchor: 0.5,
 
-        yAnchor:
-            0.5,
+        yAnchor: 0.5,
 
-        zIndex:
-            25,
+        zIndex: 25,
 
-        clickable:
-            true
+        clickable: true
 
     });
 
 }
 
-function createAlertMarker(
-    map,
-    position,
-    alert,
-    showPopup
-) {
+function createAlertMarker(map, position, alert, showPopup) {
 
-    const isTemperature =
-        alert.alertType === "TEMP_HIGH"
-        || alert.alertType === "TEMP_LOW";
+    const isTemperature = alert.alertType === "TEMP_HIGH" || alert.alertType === "TEMP_LOW";
 
 
-    const markerElement =
-        document.createElement(
-            "div"
-        );
+    const markerElement = document.createElement("div");
 
 
-    markerElement.className =
-        isTemperature
-            ? "kakao-alert-marker temperature"
-            : "kakao-alert-marker shock";
+    markerElement.className = isTemperature ? "kakao-alert-marker temperature" : "kakao-alert-marker shock";
 
 
-    markerElement.addEventListener(
-        "click",
-        function (event) {
+    markerElement.addEventListener("click", function (event) {
 
-            event.stopPropagation();
+        event.stopPropagation();
 
 
-            showPopup(
-                position,
-                createAlertPopup(
-                    alert
-                )
-            );
+        showPopup(position, createAlertPopup(alert));
 
-        }
-    );
+    });
 
 
     new kakao.maps.CustomOverlay({
 
-        map:
-        map,
+        map: map,
 
-        position:
-        position,
+        position: position,
 
-        content:
-        markerElement,
+        content: markerElement,
 
-        xAnchor:
-            0.5,
+        xAnchor: 0.5,
 
-        yAnchor:
-            0.5,
+        yAnchor: 0.5,
 
-        zIndex:
-            15,
+        zIndex: 15,
 
-        clickable:
-            true
+        clickable: true
 
     });
 
@@ -1505,25 +1175,74 @@ function escapeHtml(value) {
 
 
     return String(value)
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-        .replaceAll(
-            "\"",
-            "&quot;"
-        )
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
+
+// =====================================================
+// 상세화면 자동 갱신
+// =====================================================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const container = document.querySelector(".container");
+
+    if (!container) {
+        return;
+    }
+
+
+    const shipmentId = container.dataset.shipmentId;
+
+    const shipmentStatus = container.dataset.shipmentStatus;
+
+
+    // 완료된 운송은 자동 갱신하지 않음
+    if (shipmentStatus === "COMPLETED") {
+        return;
+    }
+
+
+    const scrollKey = `shipment-detail-scroll-${shipmentId}`;
+
+
+    // =====================================================
+    // 새로고침 전 위치 복원
+    // =====================================================
+
+    const savedScrollY = sessionStorage.getItem(scrollKey);
+
+
+    if (savedScrollY !== null) {
+
+        requestAnimationFrame(function () {
+
+            window.scrollTo(0, Number(savedScrollY));
+
+        });
+
+
+        sessionStorage.removeItem(scrollKey);
+    }
+
+
+    // =====================================================
+    // 1분마다 자동 갱신
+    // =====================================================
+
+    setInterval(function () {
+
+        // 현재 보고 있던 위치 저장
+        sessionStorage.setItem(scrollKey, String(window.scrollY));
+
+
+        // 상세 페이지 전체 갱신
+        window.location.reload();
+
+    }, 60 * 1000);
+
+});

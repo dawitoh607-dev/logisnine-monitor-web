@@ -1,14 +1,17 @@
 package com.logisnine.monitorweb.service;
 
+import com.logisnine.monitorweb.dto.JudgementRuleView;
 import com.logisnine.monitorweb.dto.LatestReadingView;
 import com.logisnine.monitorweb.dto.MapAlertView;
 import com.logisnine.monitorweb.dto.ReadingChartView;
 import com.logisnine.monitorweb.dto.RoutePointView;
 import com.logisnine.monitorweb.dto.ShipmentDetailView;
 import com.logisnine.monitorweb.dto.ShipmentListView;
+import com.logisnine.monitorweb.dto.ShipmentRegisterForm;
 import com.logisnine.monitorweb.mapper.ShipmentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -132,5 +135,22 @@ public class ShipmentService {
         });
 
         return shipments;
+    }
+
+    @Transactional
+    public Long registerShipment(ShipmentRegisterForm form) {
+
+        shipmentMapper.insertShipment(form);
+
+        shipmentMapper.insertDeviceAssignment(
+                form.getShipmentId(),
+                form.getGatewayId()
+        );
+
+        return form.getShipmentId();
+    }
+
+    public List<JudgementRuleView> findEnabledRules() {
+        return shipmentMapper.findEnabledRules();
     }
 }

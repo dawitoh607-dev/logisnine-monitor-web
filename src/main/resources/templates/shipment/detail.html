@@ -25,8 +25,6 @@
             src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e5f142083f04eaf08c8f4a10ec29a330">
     </script>
 
-    <script th:src="@{/js/shipment-detail.js}"></script>
-
 </head>
 
 
@@ -51,8 +49,7 @@
 </header>
 
 
-
-<main class="container" th:data-shipment-id="${shipment.shipmentId}">
+<main class="container" th:data-shipment-id="${shipment.shipmentId}" th:data-shipment-status="${shipment.status}">
 
 
     <!-- =====================================================
@@ -151,8 +148,114 @@
 
         </div>
 
-    </section>
+        <!-- =====================================================
+     배차 정보
+====================================================== -->
 
+        <div class="assignment-info">
+
+            <!-- Gateway -->
+            <div class="assignment-item">
+
+                <div class="assignment-icon">
+                    <i class="bi bi-router-fill"></i>
+                </div>
+
+                <div class="assignment-content">
+
+            <span>
+                Gateway
+            </span>
+
+                    <strong th:text="${shipment.gatewayId != null
+                    and !#strings.isEmpty(shipment.gatewayId)
+                    ? shipment.gatewayId
+                    : '미배정'}">
+                        GW-001
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- 운전기사 -->
+            <div class="assignment-item">
+
+                <div class="assignment-icon">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div class="assignment-content">
+
+            <span>
+                운전기사
+            </span>
+
+                    <strong th:text="${shipment.driverName != null
+                    and !#strings.isEmpty(shipment.driverName)
+                    ? shipment.driverName
+                    : '미배정'}">
+                        김기사
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- 연락처 -->
+            <div class="assignment-item">
+
+                <div class="assignment-icon">
+                    <i class="bi bi-telephone-fill"></i>
+                </div>
+
+                <div class="assignment-content">
+
+            <span>
+                연락처
+            </span>
+
+                    <strong th:text="${shipment.driverPhone != null
+                    and !#strings.isEmpty(shipment.driverPhone)
+                    ? shipment.driverPhone
+                    : '미배정'}">
+                        010-1234-5678
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- 차량번호 -->
+            <div class="assignment-item">
+
+                <div class="assignment-icon">
+                    <i class="bi bi-truck-front-fill"></i>
+                </div>
+
+                <div class="assignment-content">
+
+            <span>
+                차량번호
+            </span>
+
+                    <strong th:text="${shipment.vehicleNumber != null
+                    and !#strings.isEmpty(shipment.vehicleNumber)
+                    ? shipment.vehicleNumber
+                    : '미배정'}">
+                        12가3456
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
 
 
     <!-- =====================================================
@@ -228,7 +331,6 @@
         </div>
 
     </section>
-
 
 
     <!-- =====================================================
@@ -487,7 +589,6 @@
     </section>
 
 
-
     <!--&lt;!&ndash; =====================================================
          TAB
     ====================================================== &ndash;&gt;
@@ -555,7 +656,6 @@
         </div>
 
     </section>
-
 
 
     <!-- =====================================================
@@ -657,7 +757,6 @@
                 </span>
 
                     </div>
-
 
 
                     <!-- =================================================

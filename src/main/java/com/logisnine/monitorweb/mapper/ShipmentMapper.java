@@ -1,12 +1,16 @@
 package com.logisnine.monitorweb.mapper;
 
 import com.logisnine.monitorweb.domain.Shipment;
+import com.logisnine.monitorweb.dto.DriverCheckInForm;
+import com.logisnine.monitorweb.dto.DriverCheckInView;
+import com.logisnine.monitorweb.dto.JudgementRuleView;
 import com.logisnine.monitorweb.dto.LatestReadingView;
 import com.logisnine.monitorweb.dto.MapAlertView;
 import com.logisnine.monitorweb.dto.ReadingChartView;
 import com.logisnine.monitorweb.dto.RoutePointView;
 import com.logisnine.monitorweb.dto.ShipmentDetailView;
 import com.logisnine.monitorweb.dto.ShipmentListView;
+import com.logisnine.monitorweb.dto.ShipmentRegisterForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -42,4 +46,18 @@ public interface ShipmentMapper {
     List<MapAlertView> findMapAlerts(@Param("shipmentId") Long shipmentId);
 
     List<ShipmentListView> findShipmentList();
+
+
+    List<JudgementRuleView> findEnabledRules();
+
+    void insertShipment(ShipmentRegisterForm form);
+
+    void insertDeviceAssignment(
+            @Param("shipmentId") Long shipmentId,
+            @Param("gatewayId") String gatewayId
+    );
+
+    DriverCheckInView findDriverCheckInByGatewayId(@Param("gatewayId") String gatewayId);
+
+    int updateDriverInfo(DriverCheckInForm form);
 }

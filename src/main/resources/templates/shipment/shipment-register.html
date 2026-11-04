@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>운송 등록</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/shipment-register.css}">
+
+</head>
+
+<body>
+
+
+<!-- =========================
+     TOP HEADER
+========================= -->
+
+<header class="top-header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <path d="M3 6h11v10H3z"/>
+                <path d="M14 10h4l3 3v3h-7z"/>
+                <circle cx="7" cy="18" r="2"/>
+                <circle cx="18" cy="18" r="2"/>
+
+            </svg>
+        </div>
+
+        <div class="brand-text">
+            <span>LOGIS</span>
+            <strong>NINE</strong>
+        </div>
+
+    </div>
+
+
+    <button type="button"
+            class="menu-button">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+</header>
+
+
+
+<!-- =========================
+     PAGE
+========================= -->
+
+<main class="page-container">
+
+
+    <!-- =====================
+         TITLE CARD
+    ====================== -->
+
+    <section class="summary-card">
+
+        <div class="summary-header">
+
+            <a th:href="@{/shipments}"
+               class="back-link">
+
+                <span class="back-arrow">‹</span>
+
+                <span>운송 등록</span>
+
+            </a>
+
+
+            <span class="new-badge">
+                신규
+            </span>
+
+        </div>
+
+
+        <div class="summary-content">
+
+            <h1>
+                신규 운송 등록
+            </h1>
+
+            <p>
+                운송 정보와 Gateway를 등록해 주세요.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <form th:action="@{/shipments/register}"
+          th:object="${shipmentForm}"
+          method="post"
+          id="shipmentRegisterForm">
+
+
+        <!-- =====================
+             운송 정보
+        ====================== -->
+
+        <section class="form-card">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+
+                        <path d="M3 7h11v9H3z"/>
+                        <path d="M14 10h4l3 3v3h-7z"/>
+                        <circle cx="7" cy="18" r="2"/>
+                        <circle cx="18" cy="18" r="2"/>
+
+                    </svg>
+
+                </div>
+
+                <span>운송 정보</span>
+
+            </div>
+
+
+            <div class="field-group">
+
+                <label for="cargoName">
+                    품목
+                </label>
+
+                <input type="text"
+                       id="cargoName"
+                       th:field="*{cargoName}"
+                       placeholder="예: 냉동식품"
+                       required>
+
+            </div>
+
+
+            <div class="field-group">
+
+                <label for="plannedDepartureAt">
+                    예정 시각
+                </label>
+
+                <input type="datetime-local"
+                       id="plannedDepartureAt"
+                       th:field="*{plannedDepartureAt}"
+                       required>
+
+            </div>
+
+
+            <div class="field-group">
+
+                <label for="driverPhone">
+                    운송기사 연락처
+                </label>
+
+                <input type="tel"
+                       id="driverPhone"
+                       th:field="*{driverPhone}"
+                       placeholder="010-1234-5678"
+                       required>
+
+<!--                <div class="field-help">
+                    운송기사에게 운송 정보를 전달하기 위한 연락처입니다.
+                </div>-->
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================
+             운행 경로
+        ====================== -->
+
+        <section class="form-card">
+
+            <div class="section-title">
+
+                <div class="section-icon location">
+
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+
+                        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/>
+                        <circle cx="12" cy="10" r="2"/>
+
+                    </svg>
+
+                </div>
+
+                <span>운행 경로</span>
+
+            </div>
+
+
+
+            <!-- 출발지 -->
+
+            <div class="field-group">
+
+                <label>
+                    출발지
+                </label>
+
+
+                <div class="place-search">
+
+                    <input type="text"
+                           id="departureKeyword"
+                           placeholder="출발지를 검색하세요">
+
+                    <button type="button"
+                            onclick="searchDeparture()">
+
+                        검색
+
+                    </button>
+
+                </div>
+
+
+                <div id="departureResults"
+                     class="place-results">
+                </div>
+
+
+                <div id="selectedDeparture"
+                     class="selected-place"
+                     style="display:none;">
+                </div>
+
+
+                <input type="hidden"
+                       id="departureLocation"
+                       th:field="*{departureLocation}">
+
+                <input type="hidden"
+                       id="departureLatitude"
+                       th:field="*{departureLatitude}">
+
+                <input type="hidden"
+                       id="departureLongitude"
+                       th:field="*{departureLongitude}">
+
+            </div>
+
+
+
+            <div class="route-connector"
+                 aria-hidden="true">
+
+                <div class="route-connector-line"></div>
+
+                <div class="route-connector-arrow"></div>
+
+            </div>
+
+
+
+            <!-- 도착지 -->
+
+            <div class="field-group">
+
+                <label>
+                    도착지
+                </label>
+
+
+                <div class="place-search">
+
+                    <input type="text"
+                           id="destinationKeyword"
+                           placeholder="도착지를 검색하세요">
+
+                    <button type="button"
+                            onclick="searchDestination()">
+
+                        검색
+
+                    </button>
+
+                </div>
+
+
+                <div id="destinationResults"
+                     class="place-results">
+                </div>
+
+
+                <div id="selectedDestination"
+                     class="selected-place"
+                     style="display:none;">
+                </div>
+
+
+                <input type="hidden"
+                       id="destinationLocation"
+                       th:field="*{destinationLocation}">
+
+                <input type="hidden"
+                       id="destinationLatitude"
+                       th:field="*{destinationLatitude}">
+
+                <input type="hidden"
+                       id="destinationLongitude"
+                       th:field="*{destinationLongitude}">
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================
+             장비
+        ====================== -->
+
+        <section class="form-card">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+
+                        <rect x="5"
+                              y="4"
+                              width="14"
+                              height="16"
+                              rx="2"/>
+
+                        <path d="M9 8h6"/>
+                        <path d="M9 12h6"/>
+                        <path d="M9 16h3"/>
+
+                    </svg>
+
+                </div>
+
+                <span>장비 및 판정 기준</span>
+
+            </div>
+
+
+
+            <div class="field-group route-field">
+
+                <label for="gatewayId">
+                    Gateway 배정
+                </label>
+
+
+                <div class="select-wrapper">
+
+                    <select id="gatewayId"
+                            th:field="*{gatewayId}"
+                            required>
+
+                        <option value="">
+                            Gateway를 선택해 주세요.
+                        </option>
+
+
+                        <option th:each="gateway : ${gateways}"
+                                th:value="${gateway.gatewayId}"
+                                th:text="${gateway.gatewayName != null
+                                    ? gateway.gatewayId
+                                      + ' · '
+                                      + gateway.gatewayName
+                                    : gateway.gatewayId}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field-help">
+                    현재 다른 운송에 배정되지 않은 Gateway만 표시됩니다.
+                </div>
+
+            </div>
+
+
+
+            <div class="field-group route-field">
+
+                <label for="ruleId">
+                    판정 Rule
+                </label>
+
+
+                <div class="select-wrapper">
+
+                    <select id="ruleId"
+                            th:field="*{ruleId}"
+                            required>
+
+                        <option value="">
+                            판정 기준을 선택해 주세요.
+                        </option>
+
+
+                        <option th:each="rule : ${rules}"
+                                th:value="${rule.ruleId}"
+                                th:text="${rule.ruleName}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================
+             BUTTON
+        ====================== -->
+
+        <div class="bottom-actions">
+
+            <a th:href="@{/shipments}"
+               class="cancel-button">
+
+                취소
+
+            </a>
+
+
+            <button type="submit"
+                    class="register-button">
+
+                운송 등록
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+</main>
+
+
+
+<script type="text/javascript"
+        src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e5f142083f04eaf08c8f4a10ec29a330&libraries=services">
+</script>
+
+<script th:src="@{/js/shipment-register.js}">
+</script>
+
+
+</body>
+</html>

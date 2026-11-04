@@ -1,0 +1,485 @@
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    background: #f4f7fb;
+
+    color: #16233c;
+
+    font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            "Pretendard",
+            "Segoe UI",
+            sans-serif;
+}
+
+
+/* HEADER */
+
+.top-header {
+
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 16px;
+
+    background: #112a40;
+
+    color: white;
+}
+
+
+.brand {
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.brand-icon {
+
+    width: 25px;
+    height: 25px;
+}
+
+
+.brand-icon svg {
+
+    width: 100%;
+    height: 100%;
+}
+
+
+.brand-text {
+
+    display: flex;
+    gap: 5px;
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+
+.brand-text strong {
+
+    color: #3393ff;
+}
+
+
+/* PAGE */
+
+.page-container {
+
+    width: 100%;
+    max-width: 520px;
+
+    margin: 0 auto;
+
+    padding: 12px 10px 40px;
+}
+
+
+/* INTRO */
+
+.intro-card {
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 20px 18px;
+
+    margin-bottom: 14px;
+
+    background: white;
+
+    border-radius: 15px;
+}
+
+
+.intro-icon {
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 10px;
+
+    border-radius: 12px;
+
+    background: #eef5ff;
+
+    color: #277dff;
+}
+
+
+.intro-icon svg {
+
+    width: 100%;
+    height: 100%;
+}
+
+
+.intro-card h1 {
+
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 850;
+}
+
+
+.intro-card p {
+
+    margin: 5px 0 0;
+
+    color: #8491a3;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* CARDS */
+
+.shipment-card,
+.driver-card {
+
+    padding: 19px 16px;
+
+    margin-bottom: 14px;
+
+    border: 1px solid #e1e7ef;
+    border-radius: 15px;
+
+    background: white;
+}
+
+
+.card-title {
+
+    margin-bottom: 18px;
+
+    font-size: 17px;
+    font-weight: 850;
+}
+
+
+.shipment-number {
+
+    color: #77869b;
+
+    font-size: 13px;
+}
+
+
+.shipment-number strong {
+
+    color: #17233b;
+}
+
+
+.cargo-name {
+
+    margin-top: 7px;
+
+    color: #17233b;
+
+    font-size: 20px;
+    font-weight: 850;
+}
+
+
+/* ROUTE */
+
+.route-box {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        30px
+        1fr;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin: 20px 0;
+
+    padding: 15px 13px;
+
+    border-radius: 12px;
+
+    background: #f7f9fc;
+}
+
+
+.route-place {
+
+    min-width: 0;
+}
+
+
+.route-place.destination {
+
+    text-align: right;
+}
+
+
+.route-label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8694a6;
+
+    font-size: 10px;
+}
+
+
+.route-place strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    color: #17233b;
+
+    font-size: 13px;
+    font-weight: 750;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.route-arrow {
+
+    text-align: center;
+
+    color: #3380ed;
+
+    font-size: 19px;
+}
+
+
+/* META */
+
+.shipment-meta {
+
+    display: flex;
+    justify-content: space-between;
+
+    padding: 10px 0;
+
+    border-top: 1px solid #eef1f5;
+
+    font-size: 12px;
+}
+
+
+.shipment-meta span {
+
+    color: #8c98a9;
+}
+
+
+.shipment-meta strong {
+
+    color: #344258;
+
+    font-weight: 700;
+}
+
+
+/* FORM */
+
+.field-group {
+
+    margin-bottom: 18px;
+}
+
+
+.field-group:last-child {
+
+    margin-bottom: 0;
+}
+
+
+.field-group label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #55647b;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.field-group input {
+
+    width: 100%;
+    height: 50px;
+
+    padding: 0 14px;
+
+    border: 1px solid #d9e1eb;
+    border-radius: 10px;
+
+    background: white;
+
+    color: #17233b;
+
+    font-size: 15px;
+}
+
+
+.field-group input::placeholder {
+
+    color: #aab4c2;
+}
+
+
+.field-group input:focus {
+
+    outline: none;
+
+    border-color: #3380ff;
+
+    box-shadow:
+            0 0 0 3px
+            rgba(51, 128, 255, 0.08);
+}
+
+
+/* NOTICE */
+
+.notice {
+
+    margin: 4px 5px 15px;
+
+    color: #8b98aa;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* BUTTON */
+
+.submit-button {
+
+    width: 100%;
+    height: 52px;
+
+    border: none;
+    border-radius: 11px;
+
+    background: #2177f5;
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+            0 5px 13px
+            rgba(33, 119, 245, 0.18);
+}
+
+
+.submit-button:hover {
+
+    background: #1269e8;
+}
+
+
+/* ERROR */
+
+.error-card {
+
+    margin-top: 40px;
+
+    padding: 35px 22px;
+
+    border-radius: 15px;
+
+    background: white;
+
+    text-align: center;
+}
+
+
+.error-icon {
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 17px;
+
+    border-radius: 50%;
+
+    background: #fff2f2;
+
+    color: #f04444;
+
+    font-size: 22px;
+    font-weight: 850;
+}
+
+
+.error-card h1 {
+
+    margin: 0;
+
+    font-size: 19px;
+}
+
+
+.error-card p {
+
+    margin: 10px 0 0;
+
+    color: #77869b;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+.error-card .error-help {
+
+    color: #9ca6b4;
+
+    font-size: 11px;
+}

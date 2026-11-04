@@ -1871,3 +1871,90 @@ body {
 .legend-dot.shock {
     background: #f59e0b;
 }
+
+/* ===================================
+   배차 정보
+=================================== */
+
+.assignment-info {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+
+.assignment-item {
+
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+
+    padding: 13px 12px;
+
+    border: 1px solid #e5eaf1;
+    border-radius: 11px;
+
+    background: #f8fafc;
+}
+
+
+.assignment-icon {
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    margin-right: 10px;
+
+    border-radius: 9px;
+
+    background: #eaf3ff;
+
+    color: #287cff;
+
+    font-size: 16px;
+}
+
+
+.assignment-content {
+
+    min-width: 0;
+}
+
+
+.assignment-content span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #8b98aa;
+
+    font-size: 11px;
+}
+
+
+.assignment-content strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    color: #25344b;
+
+    font-size: 13px;
+    font-weight: 750;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

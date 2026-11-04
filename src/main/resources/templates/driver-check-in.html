@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0">
+
+    <title>운송기사 정보 입력</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/driver-check-in.css}">
+
+</head>
+
+<body>
+
+
+<header class="top-header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+                <path d="M3 6h11v10H3z"/>
+                <path d="M14 10h4l3 3v3h-7z"/>
+
+                <circle cx="7"
+                        cy="18"
+                        r="2"/>
+
+                <circle cx="18"
+                        cy="18"
+                        r="2"/>
+
+            </svg>
+
+        </div>
+
+
+        <div class="brand-text">
+
+            <span>
+                LOGIS
+            </span>
+
+            <strong>
+                NINE
+            </strong>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page-container">
+
+
+    <!-- 배정된 운송이 없는 경우 -->
+
+    <section class="error-card"
+             th:if="${shipment == null}">
+
+        <div class="error-icon">
+            !
+        </div>
+
+        <h1>
+            운송 정보를 찾을 수 없습니다.
+        </h1>
+
+        <p>
+            현재 이 Gateway에 배정된
+            운송건이 없습니다.
+        </p>
+
+        <p class="error-help">
+            Gateway가 정상적으로 배정되었는지
+            담당자에게 확인해 주세요.
+        </p>
+
+    </section>
+
+
+    <!-- 정상 운송 -->
+
+    <div th:if="${shipment != null}">
+
+
+        <section class="intro-card">
+
+            <div class="intro-icon">
+
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <path d="M3 7h11v9H3z"/>
+                    <path d="M14 10h4l3 3v3h-7z"/>
+
+                    <circle cx="7"
+                            cy="18"
+                            r="2"/>
+
+                    <circle cx="18"
+                            cy="18"
+                            r="2"/>
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <h1>
+                    운송기사 정보 입력
+                </h1>
+
+                <p>
+                    운송 정보를 확인한 후
+                    기사 정보를 입력해 주세요.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- 운송 정보 -->
+
+        <section class="shipment-card">
+
+            <div class="card-title">
+                배정된 운송
+            </div>
+
+
+            <div class="shipment-number">
+
+                운송 #
+
+                <strong th:text="${shipment.shipmentId}">
+                    5
+                </strong>
+
+            </div>
+
+
+            <div class="cargo-name"
+                 th:text="${shipment.cargoName}">
+                냉동식품 운송
+            </div>
+
+
+            <div class="route-box">
+
+                <div class="route-place">
+
+                    <span class="route-label">
+                        출발
+                    </span>
+
+                    <strong th:text="${shipment.departureLocation}">
+                        서울 물류센터
+                    </strong>
+
+                </div>
+
+
+                <div class="route-arrow">
+                    →
+                </div>
+
+
+                <div class="route-place destination">
+
+                    <span class="route-label">
+                        도착
+                    </span>
+
+                    <strong th:text="${shipment.destinationLocation}">
+                        부산 물류센터
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="shipment-meta">
+
+                <span>
+                    예정 시각
+                </span>
+
+                <strong th:text="${shipment.plannedDepartureAt != null
+                    ? #temporals.format(
+                        shipment.plannedDepartureAt,
+                        'yyyy.MM.dd HH:mm'
+                      )
+                    : '-'}">
+
+                    2026.11.04 15:00
+
+                </strong>
+
+            </div>
+
+
+            <div class="shipment-meta">
+
+                <span>
+                    Gateway
+                </span>
+
+                <strong th:text="${shipment.gatewayId}">
+                    GW-001
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- 기사 입력 -->
+
+        <form th:action="@{/driver/check-in}"
+              th:object="${driverForm}"
+              method="post">
+
+
+            <section class="driver-card">
+
+                <div class="card-title">
+                    기사 정보
+                </div>
+
+
+                <input type="hidden"
+                       th:field="*{shipmentId}">
+
+                <input type="hidden"
+                       th:field="*{gatewayId}">
+
+
+                <div class="field-group">
+
+                    <label for="driverName">
+                        성함
+                    </label>
+
+                    <input type="text"
+                           id="driverName"
+                           th:field="*{driverName}"
+                           placeholder="성함을 입력해 주세요"
+                           autocomplete="name"
+                           required>
+
+                </div>
+
+
+                <div class="field-group">
+
+                    <label for="driverPhone">
+                        연락처
+                    </label>
+
+                    <input type="tel"
+                           id="driverPhone"
+                           th:field="*{driverPhone}"
+                           placeholder="010-1234-5678"
+                           inputmode="tel"
+                           autocomplete="tel"
+                           required>
+
+                </div>
+
+
+                <div class="field-group">
+
+                    <label for="vehicleNumber">
+                        차량번호
+                    </label>
+
+                    <input type="text"
+                           id="vehicleNumber"
+                           th:field="*{vehicleNumber}"
+                           placeholder="예: 12가3456"
+                           required>
+
+                </div>
+
+            </section>
+
+
+            <div class="notice">
+
+                입력하신 정보는
+                현재 운송건에 기사 및 차량정보로
+                등록됩니다.
+
+            </div>
+
+
+            <button type="submit"
+                    class="submit-button">
+
+                운송 정보 확인
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+</main>
+
+</body>
+</html>

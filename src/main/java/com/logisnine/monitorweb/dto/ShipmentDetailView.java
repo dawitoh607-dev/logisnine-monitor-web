@@ -37,6 +37,7 @@ public class ShipmentDetailView {
 
     private String vehicleNumber;
     private String driverName;
+    private String driverPhone;
 
     private List<LatestReadingView> latestReadings;
 

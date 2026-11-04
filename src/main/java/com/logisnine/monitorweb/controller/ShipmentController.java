@@ -5,12 +5,16 @@ import com.logisnine.monitorweb.dto.ReadingChartView;
 import com.logisnine.monitorweb.dto.RoutePointView;
 import com.logisnine.monitorweb.dto.ShipmentDetailView;
 import com.logisnine.monitorweb.dto.ShipmentListView;
+import com.logisnine.monitorweb.dto.ShipmentRegisterForm;
+import com.logisnine.monitorweb.service.GatewayService;
 import com.logisnine.monitorweb.service.ShipmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +29,29 @@ import java.util.List;
 public class ShipmentController {
 
     private final ShipmentService shipmentService;
+    private final GatewayService gatewayService;
+
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+
+        model.addAttribute("shipmentForm", new ShipmentRegisterForm());
+
+        model.addAttribute("gateways", gatewayService.findAvailableGateways());
+
+        model.addAttribute("rules", shipmentService.findEnabledRules());
+
+        return "shipment/shipment-register";
+    }
+
+
+    @PostMapping("/register")
+    public String register(@ModelAttribute("shipmentForm") ShipmentRegisterForm form) {
+
+        Long shipmentId = shipmentService.registerShipment(form);
+
+        return "redirect:/shipments/" + shipmentId;
+    }
+
 
     @GetMapping
     public String list(@RequestParam(defaultValue = "ALL") String status, Model model) {

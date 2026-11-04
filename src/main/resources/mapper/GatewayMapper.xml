@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.logisnine.monitorweb.mapper.GatewayMapper">
+
+    <select id="findAvailableGateways" resultType="com.logisnine.monitorweb.dto.GatewayView">
+
+        SELECT
+        g.gateway_id,
+        g.gateway_name,
+        g.serial_number
+
+        FROM gateways g
+        WHERE g.use_yn = 'Y'
+
+        AND NOT EXISTS (
+            SELECT 1
+            FROM shipment_device_assignments a
+            WHERE a.gateway_id = g.gateway_id
+            AND a.unassigned_at IS NULL
+        )
+        ORDER BY g.gateway_id
+
+    </select>
+
+</mapper>

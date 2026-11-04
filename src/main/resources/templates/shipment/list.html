@@ -82,17 +82,13 @@
         </div>
 
 
-        <div class="shipment-total">
+        <a th:href="@{/shipments/register}"
+           class="register-button">
 
-            <span>
-                전체 운송
-            </span>
+            <i class="bi bi-plus-lg"></i>
+            신규 등록
 
-            <strong th:text="${totalCount}">
-                4
-            </strong>
-
-        </div>
+        </a>
 
     </section>
 

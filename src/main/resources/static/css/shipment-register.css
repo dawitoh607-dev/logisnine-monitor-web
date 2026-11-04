@@ -1,0 +1,715 @@
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    background: #f4f7fb;
+
+    color: #16233c;
+
+    font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            "Pretendard",
+            "Segoe UI",
+            sans-serif;
+}
+
+
+/* ===================================
+   TOP HEADER
+=================================== */
+
+.top-header {
+
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 16px;
+
+    background: #112a40;
+    color: white;
+}
+
+
+.brand {
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.brand-icon {
+
+    width: 25px;
+    height: 25px;
+
+    color: white;
+}
+
+
+.brand-icon svg {
+
+    width: 100%;
+    height: 100%;
+}
+
+
+.brand-text {
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+
+.brand-text strong {
+
+    color: #3393ff;
+}
+
+
+.menu-button {
+
+    width: 34px;
+    height: 34px;
+
+    padding: 5px;
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+
+.menu-button span {
+
+    display: block;
+
+    height: 2px;
+
+    margin: 6px 0;
+
+    border-radius: 2px;
+
+    background: #cbd5df;
+}
+
+
+/* ===================================
+   PAGE
+=================================== */
+
+.page-container {
+
+    width: 100%;
+    max-width: 520px;
+
+    margin: 0 auto;
+
+    padding: 12px 10px 40px;
+}
+
+
+/* ===================================
+   SUMMARY CARD
+=================================== */
+
+.summary-card {
+
+    padding: 18px 18px 22px;
+
+    margin-bottom: 14px;
+
+    background: white;
+
+    border-radius: 15px;
+}
+
+
+.summary-header {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.back-link {
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #16233c;
+
+    text-decoration: none;
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+
+.back-arrow {
+
+    color: #708097;
+
+    font-size: 32px;
+    font-weight: 300;
+
+    line-height: 20px;
+}
+
+
+.new-badge {
+
+    padding: 9px 18px;
+
+    border-radius: 13px;
+
+    background: #daf9e8;
+
+    color: #16ad65;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+
+.summary-content {
+
+    margin-top: 27px;
+}
+
+
+.summary-content h1 {
+
+    margin: 0;
+
+    color: #14213a;
+
+    font-size: 23px;
+    font-weight: 850;
+}
+
+
+.summary-content p {
+
+    margin: 8px 0 0;
+
+    color: #8290a3;
+
+    font-size: 14px;
+}
+
+
+/* ===================================
+   CARD
+=================================== */
+
+.form-card {
+
+    margin-bottom: 14px;
+
+    padding: 18px 15px 20px;
+
+    background: white;
+
+    border: 1px solid #e1e7ef;
+
+    border-radius: 15px;
+}
+
+
+.section-title {
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 21px;
+
+    color: #17233b;
+
+    font-size: 18px;
+    font-weight: 850;
+}
+
+
+.section-icon {
+
+    width: 21px;
+    height: 21px;
+
+    color: #257cff;
+}
+
+
+.section-icon svg {
+
+    width: 100%;
+    height: 100%;
+}
+
+
+/* ===================================
+   FIELDS
+=================================== */
+
+.field-group {
+
+    margin-bottom: 10px;
+}
+
+
+.field-group:last-child {
+
+    margin-bottom: 0;
+}
+
+
+.field-group label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #55647b;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+input,
+select {
+
+    width: 100%;
+    height: 48px;
+
+    padding: 0 14px;
+
+    border: 1px solid #d9e1eb;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #17233b;
+
+    font-size: 15px;
+
+    transition:
+            border-color 0.15s ease,
+            box-shadow 0.15s ease;
+}
+
+
+input::placeholder {
+
+    color: #a7b0bf;
+}
+
+
+input:focus,
+select:focus {
+
+    outline: none;
+
+    border-color: #3885ff;
+
+    box-shadow:
+            0 0 0 3px rgba(56, 133, 255, 0.08);
+}
+
+
+.field-help {
+
+    margin-top: 7px;
+
+    color: #9aa5b5;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* ===================================
+   PLACE SEARCH
+=================================== */
+
+.place-search {
+
+    display: flex;
+
+    gap: 7px;
+}
+
+
+.place-search input {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.place-search button {
+
+    width: 68px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #287cff;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    cursor: pointer;
+}
+
+
+.place-search button:active {
+
+    transform: translateY(1px);
+}
+
+
+/* ===================================
+   SEARCH RESULT
+=================================== */
+
+.place-results {
+
+    margin-top: 7px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: white;
+}
+
+
+.place-result-item {
+
+    padding: 12px 13px;
+
+    border: 1px solid #e3e9f0;
+    border-bottom: none;
+
+    background: white;
+
+    cursor: pointer;
+}
+
+
+.place-result-item:first-child {
+
+    border-radius: 10px 10px 0 0;
+}
+
+
+.place-result-item:last-child {
+
+    border-bottom: 1px solid #e3e9f0;
+
+    border-radius: 0 0 10px 10px;
+}
+
+
+.place-result-item:hover {
+
+    background: #f7faff;
+}
+
+
+.place-name {
+
+    color: #17233b;
+
+    font-size: 14px;
+    font-weight: 750;
+}
+
+
+.place-address {
+
+    margin-top: 5px;
+
+    color: #8a98aa;
+
+    font-size: 11px;
+}
+
+
+/* ===================================
+   SELECTED PLACE
+=================================== */
+
+.selected-place {
+
+    position: relative;
+
+    margin-top: 8px;
+
+    padding: 12px 14px;
+
+    border: 1px solid #cfe1ff;
+    border-radius: 10px;
+
+    background: #f3f8ff;
+}
+
+
+.selected-place::before {
+
+    content: "✓";
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 18px;
+    height: 18px;
+
+    margin-right: 6px;
+
+    border-radius: 50%;
+
+    background: #287cff;
+
+    color: white;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+
+.selected-place strong {
+
+    color: #176cf0;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+.selected-place span {
+
+    display: block;
+
+    margin-top: 6px;
+    margin-left: 26px;
+
+    color: #7b899c;
+
+    font-size: 11px;
+}
+
+/* ===================================
+   ROUTE CONNECTOR
+=================================== */
+
+.route-connector {
+
+    position: relative;
+
+    width: 24px;
+    height: 30px;
+
+    margin:
+            7px
+            0
+            7px
+            30px;
+}
+
+
+.route-connector-line {
+
+    position: absolute;
+
+    top: 0;
+    left: 8px;
+
+    height: 23px;
+
+    border-left: 2px dashed #b8c9df;
+}
+
+
+.route-connector-arrow {
+
+    position: absolute;
+
+    left: 4px;
+    bottom: 1px;
+
+    width: 9px;
+    height: 9px;
+
+    border-right: 2px solid #8aa5c7;
+    border-bottom: 2px solid #8aa5c7;
+
+    transform: rotate(45deg);
+}
+
+/* ===================================
+   SELECT
+=================================== */
+
+.select-wrapper {
+
+    position: relative;
+}
+
+
+.select-wrapper select {
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    padding-right: 42px;
+
+    background:
+            linear-gradient(
+                    45deg,
+                    transparent 50%,
+                    #728096 50%
+            )
+            calc(100% - 20px)
+            20px / 5px 5px no-repeat,
+
+            linear-gradient(
+                    135deg,
+                    #728096 50%,
+                    transparent 50%
+            )
+            calc(100% - 15px)
+            20px / 5px 5px no-repeat,
+
+            white;
+}
+
+
+/* ===================================
+   ACTION BUTTONS
+=================================== */
+
+.bottom-actions {
+
+    display: grid;
+
+    grid-template-columns: 0.75fr 1.6fr;
+
+    gap: 9px;
+
+    margin-top: 5px;
+}
+
+
+.cancel-button,
+.register-button {
+
+    height: 51px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    text-decoration: none;
+}
+
+
+.cancel-button {
+
+    border: 1px solid #dce3ec;
+
+    background: white;
+
+    color: #66758a;
+}
+
+
+.register-button {
+
+    border: none;
+
+    background: #2177f5;
+
+    color: white;
+
+    cursor: pointer;
+
+    box-shadow:
+            0 5px 13px rgba(33, 119, 245, 0.18);
+}
+
+
+.register-button:hover {
+
+    background: #1269e8;
+}
+
+
+/* ===================================
+   SMALL MOBILE
+=================================== */
+
+@media (max-width: 380px) {
+
+    .summary-card {
+
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+
+    .form-card {
+
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+
+    .page-container {
+
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+}
+
+.route-field {
+    margin-bottom: 0;
+}
