@@ -67,6 +67,13 @@
             </a>
 
             <span class="status-badge"
+                  th:classappend="${shipment.status == 'READY'}
+            ? ' ready'
+            : (${shipment.status == 'IN_PROGRESS'}
+                ? ' in-progress'
+                : (${shipment.status == 'COMPLETED'}
+                    ? ' completed'
+                    : ''))"
                   th:text="${shipment.statusName}">
                 운송중
             </span>
@@ -107,50 +114,80 @@
 
             <i class="bi bi-truck"></i>
 
-            <div>
 
-                <span class="label">
-                    운송 시간
-                </span>
+            <!-- READY -->
+            <div th:if="${shipment.status == 'READY'}">
 
-                <strong>
+        <span class="label">
+            예정 출발
+        </span>
 
-                    <span th:text="${shipment.startedAt != null
-                        ? #temporals.format(shipment.startedAt, 'yyyy.MM.dd HH:mm')
-                        : '-'}">
-                        2026.10.27 10:00
-                    </span>
-
-                    ~
-
-                    <span th:text="${shipment.endedAt != null
-                        ? #temporals.format(shipment.endedAt, 'yyyy.MM.dd HH:mm')
-                        : '운송중'}">
-                        운송중
-                    </span>
-
+                <strong th:text="${shipment.plannedDepartureAt != null
+                ? #temporals.format(
+                    shipment.plannedDepartureAt,
+                    'yyyy.MM.dd HH:mm'
+                  )
+                : '-'}">
+                    2026.11.05 15:00
                 </strong>
 
             </div>
 
 
-            <div class="elapsed">
+            <!-- IN_PROGRESS / COMPLETED -->
+            <div th:unless="${shipment.status == 'READY'}">
+
+                <span class="label">
+                    운송 시간
+                </span>
+
+                        <strong>
+
+                    <span th:text="${shipment.startedAt != null
+                            ? #temporals.format(
+                                shipment.startedAt,
+                                'yyyy.MM.dd HH:mm'
+                              )
+                            : '-'}">
+                        2026.11.05 15:03
+                    </span>
+
+                            ~
+
+                            <span th:text="${shipment.endedAt != null
+                            ? #temporals.format(
+                                shipment.endedAt,
+                                'yyyy.MM.dd HH:mm'
+                              )
+                            : '운송중'}">
+                        운송중
+                    </span>
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- 진행 시간 -->
+                    <div class="elapsed">
 
                 <span>
                     진행 시간
                 </span>
 
-                <strong th:text="${shipment.elapsedTime}">
-                    3시간 20분
-                </strong>
+                    <strong th:text="${shipment.status == 'READY'
+                    ? '-'
+                    : shipment.elapsedTime}">
+                        -
+                    </strong>
 
             </div>
 
         </div>
 
         <!-- =====================================================
-     배차 정보
-====================================================== -->
+             배차 정보
+        ====================================================== -->
 
         <div class="assignment-info">
 
@@ -252,6 +289,51 @@
                 </div>
 
             </div>
+
+        </div>
+
+        <div class="report-action"
+             th:if="${shipment.status == 'COMPLETED'}">
+
+            <a th:href="@{/shipments/{id}/report(id=${shipment.shipmentId})}"
+               class="report-button">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+                운송 리포트
+
+            </a>
+
+        </div>
+
+        <div class="shipment-actions"
+             th:if="${shipment.status == 'READY'}">
+
+
+            <a th:href="@{/shipments/{id}/edit(id=${shipment.shipmentId})}"
+               class="shipment-edit-button">
+
+                <i class="bi bi-pencil"></i>
+
+                수정
+
+            </a>
+
+
+            <form th:action="@{/shipments/{id}/delete(id=${shipment.shipmentId})}"
+                  method="post"
+                  onsubmit="return confirm('등록된 운송건을 삭제하시겠습니까?');">
+
+                <button type="submit"
+                        class="shipment-delete-button">
+
+                    <i class="bi bi-trash"></i>
+
+                    삭제
+
+                </button>
+
+            </form>
 
         </div>
 
@@ -377,7 +459,12 @@
 
 
             <div class="logger-panel"
-                 th:each="reading : ${shipment.latestReadings}">
+                 th:each="reading : ${shipment.latestReadings}"
+                 th:classappend="${reading.receiveStatus == 'DELAY'}
+                    ? ' receive-delay'
+                    : (${reading.receiveStatus == 'DISCONNECTED'}
+                        ? ' receive-disconnected'
+                        : '')">
 
 
                 <!-- 로거 헤더 -->
@@ -398,16 +485,42 @@
 
                     <div class="logger-latest">
 
-                        <span class="latest-badge">
+                        <span class="latest-badge"
+                              th:classappend="${reading.receiveStatus == 'NORMAL'}
+                                    ? ' normal'
+                                    : (${reading.receiveStatus == 'DELAY'}
+                                        ? ' delay'
+                                        : (${reading.receiveStatus == 'DISCONNECTED'}
+                                            ? ' disconnected'
+                                            : ' unknown'))">
+
                             <i class="bi bi-circle-fill"></i>
-                            최신
+
+                            <span th:if="${reading.receiveStatus == 'NORMAL'}">
+                                최신
+                            </span>
+
+                            <span th:if="${reading.receiveStatus == 'DELAY'}">
+                                수신 지연
+                            </span>
+
+                            <span th:if="${reading.receiveStatus == 'DISCONNECTED'}">
+                                수신 끊김
+                            </span>
+
+                            <span th:if="${reading.receiveStatus == 'UNKNOWN'}">
+                                수신 정보 없음
+                            </span>
+
                         </span>
 
                         <span class="measured-time"
-                              th:text="${reading.measuredAt != null
-                            ? #temporals.format(reading.measuredAt, 'MM.dd HH:mm:ss')
-                            : '-'}">
-                                10.27 14:10:00
+                              th:text="${reading.receivedAt != null
+                                  ? #temporals.format(
+                                        reading.receivedAt,
+                                        'MM.dd HH:mm:ss'
+                                    )
+                                  : '-'}">
                         </span>
 
                     </div>

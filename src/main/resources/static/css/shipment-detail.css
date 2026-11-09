@@ -120,14 +120,39 @@ body {
 }
 
 .status-badge {
-    padding: 8px 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-    background: #d8fae5;
-    color: #0baf58;
+    min-width: 72px;
+    height: 38px;
+
+    padding: 0 14px;
 
     border-radius: 12px;
 
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* 대기 */
+.status-badge.completed {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+
+/* 운송중 */
+.status-badge.in-progress {
+    background: #d1fae5;
+    color: #047857;
+}
+
+
+/* 완료 */
+.status-badge.ready {
+    background: #e2e8f0;
+    color: #475569;
 }
 
 .shipment-id {
@@ -839,27 +864,75 @@ body {
     font-weight: 700;
 }
 
-
 .latest-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
 
-    padding: 5px 9px;
+    gap: 4px;
 
-    border-radius: 20px;
+    padding: 4px 7px;
 
-    background: #effaf4;
-    color: #18a957;
+    border-radius: 14px;
 
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
 
     white-space: nowrap;
 }
 
 .latest-badge i {
     font-size: 6px;
+}
+
+
+/* 정상 */
+
+.latest-badge.normal {
+
+    background: #dcfce7;
+
+    color: #047857;
+}
+
+
+/* 지연 */
+
+.latest-badge.delay {
+
+    background: #fff7db;
+
+    color: #a16207;
+}
+
+
+/* 연결 끊김 */
+
+.latest-badge.disconnected {
+    background: #fff0f0;
+    color: #d64545;
+}
+
+
+/* 수신정보 없음 */
+
+.latest-badge.unknown {
+
+    background: #eef2f6;
+
+    color: #64748b;
+}
+
+.logger-panel.receive-delay {
+
+    border-color: #f2cc78;
+
+    background: #fffdf7;
+}
+
+
+.logger-panel.receive-disconnected {
+    border-color: #f3c2c2;
+    background: #fffafa;
 }
 
 
@@ -1957,4 +2030,119 @@ body {
 
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* ===================================
+   운송 수정 / 삭제
+=================================== */
+
+.shipment-actions {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+
+.shipment-actions form {
+
+    width: 100%;
+    margin: 0;
+}
+
+
+.shipment-edit-button,
+.shipment-delete-button {
+
+    width: 100%;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 0;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+
+.shipment-edit-button {
+
+    border: 1px solid #bcd3f5;
+
+    background: #ffffff;
+
+    color: #2878e8;
+}
+
+
+.shipment-delete-button {
+
+    border: 1px solid #ffcaca;
+
+    background: #fff7f7;
+
+    color: #ed4b4b;
+}
+
+
+.shipment-edit-button:hover {
+
+    background: #f3f7ff;
+}
+
+
+.shipment-delete-button:hover {
+
+    background: #fff0f0;
+}
+
+.report-action {
+    margin-top: 14px;
+}
+
+
+.report-button {
+
+    width: 100%;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 10px;
+
+    background: #173f77;
+
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+.report-button:hover,
+.report-button:visited,
+.report-button:active {
+
+    color: #ffffff;
+    text-decoration: none;
 }

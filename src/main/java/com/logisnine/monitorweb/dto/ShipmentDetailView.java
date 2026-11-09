@@ -32,6 +32,7 @@ public class ShipmentDetailView {
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
     private String elapsedTime;
+    private LocalDateTime plannedDepartureAt;
 
     private String gatewayId;
 

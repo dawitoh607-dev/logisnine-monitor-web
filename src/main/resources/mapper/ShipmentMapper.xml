@@ -15,19 +15,20 @@
 
         SELECT
         s.shipment_id,
+        s.planned_departure_at,
 
         (
-            SELECT a.gateway_id
+        SELECT a.gateway_id
 
-            FROM shipment_device_assignments a
+        FROM shipment_device_assignments a
 
-            WHERE a.shipment_id = s.shipment_id
+        WHERE a.shipment_id = s.shipment_id
 
-            ORDER BY
-            a.assigned_at DESC,
-            a.assignment_id DESC
+        ORDER BY
+        a.assigned_at DESC,
+        a.assignment_id DESC
 
-            LIMIT 1
+        LIMIT 1
         ) AS gateway_id,
 
         s.cargo_name,
@@ -74,6 +75,8 @@
 
         r.logger_id,
         r.measured_at,
+        r.received_at,
+
         r.temperature,
         r.humidity,
 
@@ -83,25 +86,25 @@
 
         WHERE EXISTS
         (
-            SELECT 1
+        SELECT 1
 
-            FROM shipment_device_assignments a
+        FROM shipment_device_assignments a
 
-            WHERE a.shipment_id = #{shipmentId}
+        WHERE a.shipment_id = #{shipmentId}
 
-            AND a.gateway_id = r.gateway_id
+        AND a.gateway_id = r.gateway_id
 
-            AND (
-                a.logger_id IS NULL
-                OR a.logger_id = r.logger_id
-            )
+        AND (
+        a.logger_id IS NULL
+        OR a.logger_id = r.logger_id
+        )
 
-            AND r.measured_at &gt;= a.assigned_at
+        AND r.measured_at &gt;= a.assigned_at
 
-            AND (
-                a.unassigned_at IS NULL
-                OR r.measured_at &lt;= a.unassigned_at
-            )
+        AND (
+        a.unassigned_at IS NULL
+        OR r.measured_at &lt;= a.unassigned_at
+        )
         )
 
         AND r.measured_at &gt;= #{startedAt}
@@ -161,25 +164,25 @@
 
         AND EXISTS
         (
-            SELECT 1
+        SELECT 1
 
-            FROM shipment_device_assignments a
+        FROM shipment_device_assignments a
 
-            WHERE a.shipment_id = #{shipmentId}
+        WHERE a.shipment_id = #{shipmentId}
 
-            AND a.gateway_id = r.gateway_id
+        AND a.gateway_id = r.gateway_id
 
-            AND (
-                a.logger_id IS NULL
-                OR a.logger_id = r.logger_id
-            )
+        AND (
+        a.logger_id IS NULL
+        OR a.logger_id = r.logger_id
+        )
 
-            AND r.measured_at &gt;= a.assigned_at
+        AND r.measured_at &gt;= a.assigned_at
 
-            AND (
-                a.unassigned_at IS NULL
-                OR r.measured_at &lt;= a.unassigned_at
-            )
+        AND (
+        a.unassigned_at IS NULL
+        OR r.measured_at &lt;= a.unassigned_at
+        )
         )
 
         AND r.measured_at &gt;= #{startedAt}
@@ -211,25 +214,25 @@
 
         WHERE EXISTS
         (
-            SELECT 1
+        SELECT 1
 
-            FROM shipment_device_assignments a
+        FROM shipment_device_assignments a
 
-            WHERE a.shipment_id = #{shipmentId}
+        WHERE a.shipment_id = #{shipmentId}
 
-            AND a.gateway_id = r.gateway_id
+        AND a.gateway_id = r.gateway_id
 
-            AND (
-                a.logger_id IS NULL
-                OR a.logger_id = r.logger_id
-            )
+        AND (
+        a.logger_id IS NULL
+        OR a.logger_id = r.logger_id
+        )
 
-            AND r.measured_at &gt;= a.assigned_at
+        AND r.measured_at &gt;= a.assigned_at
 
-            AND (
-                a.unassigned_at IS NULL
-                OR r.measured_at &lt;= a.unassigned_at
-            )
+        AND (
+        a.unassigned_at IS NULL
+        OR r.measured_at &lt;= a.unassigned_at
+        )
         )
 
         AND r.measured_at &gt;= #{startedAt}
@@ -295,17 +298,17 @@
         s.shipment_id,
 
         (
-            SELECT a.gateway_id
+        SELECT a.gateway_id
 
-            FROM shipment_device_assignments a
+        FROM shipment_device_assignments a
 
-            WHERE a.shipment_id = s.shipment_id
+        WHERE a.shipment_id = s.shipment_id
 
-            ORDER BY
-            a.assigned_at DESC,
-            a.assignment_id DESC
+        ORDER BY
+        a.assigned_at DESC,
+        a.assignment_id DESC
 
-            LIMIT 1
+        LIMIT 1
         ) AS gateway_id,
 
         s.cargo_name,
@@ -319,27 +322,27 @@
         s.created_at,
 
         (
-            SELECT COUNT(*)
+        SELECT COUNT(*)
 
-            FROM alerts a
+        FROM alerts a
 
-            WHERE a.shipment_id = s.shipment_id
+        WHERE a.shipment_id = s.shipment_id
 
-            AND a.alert_type IN (
-            'TEMP_HIGH',
-            'TEMP_LOW'
-            )
+        AND a.alert_type IN (
+        'TEMP_HIGH',
+        'TEMP_LOW'
+        )
 
         ) AS temp_deviation_count,
 
         (
-            SELECT COUNT(*)
+        SELECT COUNT(*)
 
-            FROM alerts a
+        FROM alerts a
 
-            WHERE a.shipment_id = s.shipment_id
+        WHERE a.shipment_id = s.shipment_id
 
-            AND a.alert_type = 'SHOCK'
+        AND a.alert_type = 'SHOCK'
 
         ) AS shock_count
 
@@ -496,15 +499,216 @@
         WHERE shipment_id = #{shipmentId}
 
         AND EXISTS (
-            SELECT 1
+        SELECT 1
 
-            FROM shipment_device_assignments a
+        FROM shipment_device_assignments a
 
-            WHERE a.shipment_id = shipments.shipment_id
-            AND a.gateway_id = #{gatewayId}
-            AND a.unassigned_at IS NULL
+        WHERE a.shipment_id = shipments.shipment_id
+        AND a.gateway_id = #{gatewayId}
+        AND a.unassigned_at IS NULL
         )
 
     </update>
 
+    <select id="findEditForm" resultType="com.logisnine.monitorweb.dto.ShipmentRegisterForm">
+
+        SELECT
+        s.shipment_id,
+        s.cargo_name,
+
+        s.departure_location,
+        s.departure_latitude,
+        s.departure_longitude,
+
+        s.destination_location,
+        s.destination_latitude,
+        s.destination_longitude,
+
+        s.planned_departure_at,
+        s.driver_phone,
+
+        s.rule_id,
+
+        (
+        SELECT a.gateway_id
+
+        FROM shipment_device_assignments a
+
+        WHERE a.shipment_id = s.shipment_id
+        AND a.unassigned_at IS NULL
+
+        ORDER BY
+        a.assigned_at DESC,
+        a.assignment_id DESC
+
+        LIMIT 1
+        ) AS gateway_id
+
+        FROM shipments s
+
+        WHERE s.shipment_id = #{shipmentId}
+
+    </select>
+
+    <select id="findShipmentStatus" resultType="string">
+
+        SELECT status
+
+        FROM shipments
+
+        WHERE shipment_id = #{shipmentId}
+
+    </select>
+
+    <select id="findCurrentGatewayId" resultType="string">
+
+        SELECT gateway_id
+
+        FROM shipment_device_assignments
+
+        WHERE shipment_id = #{shipmentId}
+        AND unassigned_at IS NULL
+
+        ORDER BY
+        assigned_at DESC,
+        assignment_id DESC
+
+        LIMIT 1
+
+    </select>
+
+    <update id="updateShipment" parameterType="com.logisnine.monitorweb.dto.ShipmentRegisterForm">
+
+        UPDATE shipments
+
+        SET
+        gateway_id = #{gatewayId},
+        rule_id = #{ruleId},
+
+        cargo_name = #{cargoName},
+
+        departure_location = #{departureLocation},
+        departure_latitude = #{departureLatitude},
+        departure_longitude = #{departureLongitude},
+
+        destination_location = #{destinationLocation},
+        destination_latitude = #{destinationLatitude},
+        destination_longitude = #{destinationLongitude},
+
+        planned_departure_at = #{plannedDepartureAt},
+        driver_phone = #{driverPhone},
+
+        updated_at =
+        (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Seoul')
+
+        WHERE shipment_id = #{shipmentId}
+        AND status = 'READY'
+
+    </update>
+
+    <update id="closeCurrentAssignment">
+
+        UPDATE shipment_device_assignments
+
+        SET unassigned_at =
+        (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Seoul')
+
+        WHERE shipment_id = #{shipmentId}
+        AND unassigned_at IS NULL
+
+    </update>
+
+    <delete id="deleteAlerts">
+
+        DELETE FROM alerts
+        WHERE shipment_id = #{shipmentId}
+
+    </delete>
+
+
+    <delete id="deleteAssignments">
+
+        DELETE FROM shipment_device_assignments
+        WHERE shipment_id = #{shipmentId}
+
+    </delete>
+
+
+    <delete id="deleteShipment">
+
+        DELETE FROM shipments
+        WHERE shipment_id = #{shipmentId}
+        AND status = 'READY'
+
+    </delete>
+
+    <!-- =====================================================
+     운송 리포트 센서 요약
+====================================================== -->
+
+    <select id="findReportSensorSummary"
+            resultType="com.logisnine.monitorweb.dto.ShipmentReportSensorSummaryView">
+
+        SELECT
+
+        COUNT(*) AS reading_count,
+
+        COUNT(DISTINCT r.logger_id)::INTEGER
+        AS logger_count,
+
+        ROUND(
+        MIN(r.temperature),
+        2
+        ) AS min_temperature,
+
+        ROUND(
+        MAX(r.temperature),
+        2
+        ) AS max_temperature,
+
+        ROUND(
+        AVG(r.temperature),
+        2
+        ) AS avg_temperature,
+
+        ROUND(
+        AVG(r.humidity),
+        2
+        ) AS avg_humidity,
+
+        ROUND(
+        MAX(r.shock_g),
+        3
+        ) AS max_shock_g
+
+        FROM readings r
+
+        WHERE EXISTS
+        (
+            SELECT 1
+
+            FROM shipment_device_assignments a
+
+            WHERE a.shipment_id = #{shipmentId}
+
+            AND a.gateway_id = r.gateway_id
+
+            AND (
+                a.logger_id IS NULL
+                OR a.logger_id = r.logger_id
+            )
+
+            AND r.measured_at &gt;= a.assigned_at
+
+            AND (
+                a.unassigned_at IS NULL
+                OR r.measured_at &lt;= a.unassigned_at
+            )
+        )
+
+        AND r.measured_at &gt;= #{startedAt}
+
+        AND r.measured_at &lt;= #{endedAt}
+
+    </select>
 </mapper>

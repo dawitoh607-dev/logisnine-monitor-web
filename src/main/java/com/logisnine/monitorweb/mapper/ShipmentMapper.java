@@ -11,6 +11,7 @@ import com.logisnine.monitorweb.dto.RoutePointView;
 import com.logisnine.monitorweb.dto.ShipmentDetailView;
 import com.logisnine.monitorweb.dto.ShipmentListView;
 import com.logisnine.monitorweb.dto.ShipmentRegisterForm;
+import com.logisnine.monitorweb.dto.ShipmentReportSensorSummaryView;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -60,4 +61,26 @@ public interface ShipmentMapper {
     DriverCheckInView findDriverCheckInByGatewayId(@Param("gatewayId") String gatewayId);
 
     int updateDriverInfo(DriverCheckInForm form);
+
+    ShipmentRegisterForm findEditForm(@Param("shipmentId") Long shipmentId);
+
+    String findShipmentStatus(@Param("shipmentId") Long shipmentId);
+
+    String findCurrentGatewayId(@Param("shipmentId") Long shipmentId);
+
+    int updateShipment(ShipmentRegisterForm form);
+
+    int closeCurrentAssignment(@Param("shipmentId") Long shipmentId);
+
+    int deleteAlerts(@Param("shipmentId") Long shipmentId);
+
+    int deleteAssignments(@Param("shipmentId") Long shipmentId);
+
+    int deleteShipment(@Param("shipmentId") Long shipmentId);
+
+    ShipmentReportSensorSummaryView findReportSensorSummary(
+            @Param("shipmentId") Long shipmentId,
+            @Param("startedAt") LocalDateTime startedAt,
+            @Param("endedAt") LocalDateTime endedAt
+    );
 }

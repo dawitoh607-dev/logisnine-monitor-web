@@ -16,4 +16,15 @@ public class GatewayService {
     public List<GatewayView> findAvailableGateways() {
         return gatewayMapper.findAvailableGateways();
     }
+
+    public List<GatewayView> findAvailableGatewaysForShipment(Long shipmentId) {
+
+        return gatewayMapper.findAvailableGatewaysForShipment(shipmentId);
+    }
+
+
+    public boolean isGatewayAvailableForShipment(String gatewayId, Long shipmentId) {
+
+        return gatewayMapper.isGatewayAvailableForShipment(gatewayId, shipmentId);
+    }
 }

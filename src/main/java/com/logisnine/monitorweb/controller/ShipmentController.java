@@ -6,6 +6,7 @@ import com.logisnine.monitorweb.dto.RoutePointView;
 import com.logisnine.monitorweb.dto.ShipmentDetailView;
 import com.logisnine.monitorweb.dto.ShipmentListView;
 import com.logisnine.monitorweb.dto.ShipmentRegisterForm;
+import com.logisnine.monitorweb.dto.ShipmentReportView;
 import com.logisnine.monitorweb.service.GatewayService;
 import com.logisnine.monitorweb.service.ShipmentService;
 import lombok.RequiredArgsConstructor;
@@ -64,17 +65,11 @@ public class ShipmentController {
 
         long totalCount = allShipments.size();
 
-        long readyCount = allShipments.stream()
-                        .filter(s -> "READY".equals(s.getStatus()))
-                        .count();
+        long readyCount = allShipments.stream().filter(s -> "READY".equals(s.getStatus())).count();
 
-        long inProgressCount = allShipments.stream()
-                        .filter(s -> "IN_PROGRESS".equals(s.getStatus()))
-                        .count();
+        long inProgressCount = allShipments.stream().filter(s -> "IN_PROGRESS".equals(s.getStatus())).count();
 
-        long completedCount = allShipments.stream()
-                        .filter(s -> "COMPLETED".equals(s.getStatus()))
-                        .count();
+        long completedCount = allShipments.stream().filter(s -> "COMPLETED".equals(s.getStatus())).count();
 
 
         // =====================================================
@@ -87,9 +82,7 @@ public class ShipmentController {
         if ("ALL".equals(status)) {
             shipments = allShipments;
         } else {
-            shipments = allShipments.stream()
-                            .filter(s -> status.equals(s.getStatus()))
-                            .toList();
+            shipments = allShipments.stream().filter(s -> status.equals(s.getStatus())).toList();
         }
 
         // =====================================================
@@ -124,10 +117,7 @@ public class ShipmentController {
     @ResponseBody
     public List<ReadingChartView> readings(@PathVariable Long shipmentId, @RequestParam String loggerId) {
 
-        return shipmentService.findReadingsForChart(
-                shipmentId,
-                loggerId
-        );
+        return shipmentService.findReadingsForChart(shipmentId, loggerId);
     }
 
     @GetMapping("/{shipmentId}")
@@ -136,14 +126,12 @@ public class ShipmentController {
         ShipmentDetailView shipment = shipmentService.findDetailById(shipmentId);
 
         // 화면 표시용 상태명
-        shipment.setStatusName(
-                switch (shipment.getStatus()) {
-                    case "READY" -> "운송대기";
-                    case "IN_PROGRESS" -> "운송중";
-                    case "COMPLETED" -> "운송완료";
-                    default -> shipment.getStatus();
-                }
-        );
+        shipment.setStatusName(switch (shipment.getStatus()) {
+            case "READY" -> "운송대기";
+            case "IN_PROGRESS" -> "운송중";
+            case "COMPLETED" -> "운송완료";
+            default -> shipment.getStatus();
+        });
 
         shipment.setElapsedTime(calculateElapsedTime(shipment.getStartedAt(), shipment.getEndedAt()));
 
@@ -168,5 +156,57 @@ public class ShipmentController {
         long minutes = duration.toMinutesPart();
 
         return hours + "시간 " + minutes + "분";
+    }
+
+    @GetMapping("/{shipmentId}/edit")
+    public String editForm(@PathVariable Long shipmentId, Model model) {
+
+        ShipmentRegisterForm form = shipmentService.getEditForm(shipmentId);
+
+        if (form == null) {
+            return "redirect:/shipments";
+        }
+
+        if (!shipmentService.isEditable(shipmentId)) {
+            return "redirect:/shipments/" + shipmentId;
+        }
+
+        model.addAttribute("shipmentForm", form);
+        model.addAttribute("gateways", gatewayService.findAvailableGatewaysForShipment(shipmentId));
+        model.addAttribute("rules", shipmentService.findEnabledRules());
+
+        return "shipment/shipment-edit";
+    }
+
+    @PostMapping("/{shipmentId}/edit")
+    public String edit(@PathVariable Long shipmentId, @ModelAttribute("shipmentForm") ShipmentRegisterForm form) {
+
+        form.setShipmentId(shipmentId);
+
+        shipmentService.updateShipment(form);
+
+        return "redirect:/shipments/" + shipmentId;
+    }
+
+    @PostMapping("/{shipmentId}/delete")
+    public String delete(@PathVariable Long shipmentId) {
+
+        shipmentService.deleteShipment(shipmentId);
+
+        return "redirect:/shipments";
+    }
+
+    @GetMapping("/{shipmentId}/report")
+    public String report(@PathVariable Long shipmentId, Model model) {
+
+        if (!shipmentService.isReportAvailable(shipmentId)) {
+            return "redirect:/shipments/" + shipmentId;
+        }
+
+        ShipmentReportView report = shipmentService.findReportById(shipmentId);
+
+        model.addAttribute("report", report);
+
+        return "shipment/report";
     }
 }

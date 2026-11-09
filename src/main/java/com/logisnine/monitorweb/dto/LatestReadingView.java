@@ -15,4 +15,10 @@ public class LatestReadingView {
 
     private LocalDateTime measuredAt;
 
+    private LocalDateTime receivedAt;
+
+    private Long receiveDelayMinutes;
+
+    private String receiveStatus;
+
 }

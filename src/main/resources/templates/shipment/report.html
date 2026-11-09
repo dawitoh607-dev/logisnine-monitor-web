@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LOGIS NINE - 운송 리포트</title>
+
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link rel="stylesheet"
+          th:href="@{/css/shipment-report.css}">
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="logo">
+
+        <i class="bi bi-truck"></i>
+
+        <span>
+            LOGIS <strong>NINE</strong>
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<main class="report-container">
+
+
+    <!-- 상단 버튼 -->
+
+    <div class="report-toolbar">
+
+        <a th:href="@{/shipments/{id}(id=${report.shipment.shipmentId})}"
+           class="back-button">
+
+            <i class="bi bi-chevron-left"></i>
+            운송 상세
+
+        </a>
+
+
+        <button type="button"
+                class="print-button"
+                onclick="window.print()">
+
+            <i class="bi bi-printer"></i>
+            인쇄
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         리포트 HEADER
+    ====================================================== -->
+
+    <section class="report-header">
+
+        <div>
+
+            <span class="report-label">
+                TRANSPORT REPORT
+            </span>
+
+            <h1>
+                운송 완료 리포트
+            </h1>
+
+
+            <div class="report-number">
+
+                운송 #
+
+                <strong th:text="${report.shipment.shipmentId}">
+                    10
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <span class="completed-badge">
+            운송 완료
+        </span>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ROUTE
+    ====================================================== -->
+
+    <section class="report-card">
+
+        <div class="route">
+
+            <div class="route-point">
+
+                <span>
+                    출발
+                </span>
+
+                <strong th:text="${report.shipment.departureLocation}">
+                    서울 물류센터
+                </strong>
+
+            </div>
+
+
+            <div class="route-line">
+
+                <span></span>
+
+                <i class="bi bi-arrow-right"></i>
+
+                <span></span>
+
+            </div>
+
+
+            <div class="route-point destination">
+
+                <span>
+                    도착
+                </span>
+
+                <strong th:text="${report.shipment.destinationLocation}">
+                    부산 물류센터
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="cargo-name"
+             th:text="${report.shipment.cargoName}">
+            냉동식품
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         기본 정보
+    ====================================================== -->
+
+    <section class="report-card">
+
+        <h2>
+            <i class="bi bi-info-circle-fill"></i>
+            운송 정보
+        </h2>
+
+
+        <div class="info-grid">
+
+
+            <div class="info-item">
+
+                <span>
+                    Gateway
+                </span>
+
+                <strong th:text="${report.shipment.gatewayId ?: '-'}">
+                    GW-001
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>
+                    차량번호
+                </span>
+
+                <strong th:text="${report.shipment.vehicleNumber ?: '-'}">
+                    12가3456
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>
+                    운전기사
+                </span>
+
+                <strong th:text="${report.shipment.driverName ?: '-'}">
+                    김기사
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>
+                    연락처
+                </span>
+
+                <strong th:text="${report.shipment.driverPhone ?: '-'}">
+                    010-1234-5678
+                </strong>
+
+            </div>
+
+
+            <div class="info-item wide">
+
+                <span>
+                    실제 출발
+                </span>
+
+                <strong th:text="${#temporals.format(
+                        report.shipment.startedAt,
+                        'yyyy.MM.dd HH:mm:ss'
+                    )}">
+                </strong>
+
+            </div>
+
+
+            <div class="info-item wide">
+
+                <span>
+                    실제 도착
+                </span>
+
+                <strong th:text="${#temporals.format(
+                        report.shipment.endedAt,
+                        'yyyy.MM.dd HH:mm:ss'
+                    )}">
+                </strong>
+
+            </div>
+
+
+            <div class="info-item wide">
+
+                <span>
+                    총 운송시간
+                </span>
+
+                <strong th:text="${report.elapsedTime}">
+                    4시간 21분
+                </strong>
+
+            </div>
+
+
+            <div class="info-item wide">
+
+                <span>
+                    운송 데이터
+                </span>
+
+                <strong>
+
+                    <span th:text="${report.sensorSummary.loggerCount}">
+                        2
+                    </span>
+
+                    개 Logger ·
+
+                    <span th:text="${report.sensorSummary.readingCount}">
+                        120
+                    </span>
+
+                    건
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         센서 결과
+    ====================================================== -->
+
+    <section class="report-card">
+
+        <h2>
+            <i class="bi bi-thermometer-half"></i>
+            운송 환경 요약
+        </h2>
+
+
+        <div class="metric-grid">
+
+
+            <div class="metric">
+
+                <span>
+                    최저 온도
+                </span>
+
+                <strong th:text="${report.sensorSummary.minTemperature != null
+                        ? report.sensorSummary.minTemperature + '℃'
+                        : '-'}">
+                    -20.1℃
+                </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    최고 온도
+                </span>
+
+                <strong th:text="${report.sensorSummary.maxTemperature != null
+                        ? report.sensorSummary.maxTemperature + '℃'
+                        : '-'}">
+                    -14.2℃
+                </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    평균 온도
+                </span>
+
+                <strong th:text="${report.sensorSummary.avgTemperature != null
+                        ? report.sensorSummary.avgTemperature + '℃'
+                        : '-'}">
+                    -17.1℃
+                </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    평균 습도
+                </span>
+
+                <strong th:text="${report.sensorSummary.avgHumidity != null
+                        ? report.sensorSummary.avgHumidity + '%'
+                        : '-'}">
+                    63.2%
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="event-summary">
+
+
+            <div class="event-item temperature">
+
+                <span>
+                    온도 이탈
+                </span>
+
+                <strong th:text="${report.shipment.tempDeviationCount + '건'}">
+                    2건
+                </strong>
+
+            </div>
+
+
+            <div class="event-item shock">
+
+                <span>
+                    충격 발생
+                </span>
+
+                <strong th:text="${report.shipment.shockCount + '건'}">
+                    1건
+                </strong>
+
+            </div>
+
+
+            <div class="event-item">
+
+                <span>
+                    최대 충격
+                </span>
+
+                <strong th:text="${report.sensorSummary.maxShockG != null
+                        ? report.sensorSummary.maxShockG + 'G'
+                        : '-'}">
+                    4.2G
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         그래프
+    ====================================================== -->
+
+    <section class="report-card">
+
+        <div class="report-chart-header">
+
+            <h2>
+                <i class="bi bi-graph-up"></i>
+                온도 / 습도 추이
+            </h2>
+
+
+            <select id="reportLoggerSelect">
+
+                <option th:each="reading : ${report.shipment.latestReadings}"
+                        th:value="${reading.loggerId}"
+                        th:text="${reading.loggerId}">
+                    LG-001
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="report-chart-wrapper">
+
+            <canvas id="reportTemperatureChart"
+                    th:data-temp-min="${report.shipment.tempMin}"
+                    th:data-temp-max="${report.shipment.tempMax}">
+            </canvas>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MAP
+    ====================================================== -->
+
+    <section class="report-card">
+
+        <h2>
+            <i class="bi bi-geo-alt-fill"></i>
+            운행 경로
+        </h2>
+
+
+        <div id="reportMap"
+
+             th:data-shipment-id="${report.shipment.shipmentId}"
+
+             th:data-departure-latitude="${report.shipment.departureLatitude}"
+
+             th:data-departure-longitude="${report.shipment.departureLongitude}"
+
+             th:data-destination-latitude="${report.shipment.destinationLatitude}"
+
+             th:data-destination-longitude="${report.shipment.destinationLongitude}">
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ALERT HISTORY
+    ====================================================== -->
+
+    <section class="report-card">
+
+        <h2>
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            이상 발생 이력
+        </h2>
+
+
+        <div class="empty-alert"
+             th:if="${report.shipment.alerts == null
+                    or #lists.isEmpty(report.shipment.alerts)}">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            운송 중 발생한 이상 이벤트가 없습니다.
+
+        </div>
+
+
+
+        <div class="alert-table-wrapper"
+             th:if="${report.shipment.alerts != null
+                    and !#lists.isEmpty(report.shipment.alerts)}">
+
+
+            <table class="alert-table">
+
+                <thead>
+
+                <tr>
+
+                    <th>
+                        시간
+                    </th>
+
+                    <th>
+                        Logger
+                    </th>
+
+                    <th>
+                        유형
+                    </th>
+
+                    <th>
+                        측정값
+                    </th>
+
+                    <th>
+                        기준
+                    </th>
+
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                <tr th:each="alert : ${report.shipment.alerts}">
+
+                    <td th:text="${#temporals.format(
+                            alert.occurredAt,
+                            'MM.dd HH:mm'
+                        )}">
+                    </td>
+
+
+                    <td th:text="${alert.loggerId}">
+                    </td>
+
+
+                    <td>
+
+                        <span th:if="${alert.type == 'TEMP_HIGH'}">
+                            온도 상한 이탈
+                        </span>
+
+                        <span th:if="${alert.type == 'TEMP_LOW'}">
+                            온도 하한 이탈
+                        </span>
+
+                        <span th:if="${alert.type == 'SHOCK'}">
+                            충격
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span th:text="${alert.extremeValue}">
+                        </span>
+
+                        <span th:if="${alert.type == 'SHOCK'}">
+                            G
+                        </span>
+
+                        <span th:unless="${alert.type == 'SHOCK'}">
+                            ℃
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span th:text="${alert.thresholdValue}">
+                        </span>
+
+                        <span th:if="${alert.type == 'SHOCK'}">
+                            G
+                        </span>
+
+                        <span th:unless="${alert.type == 'SHOCK'}">
+                            ℃
+                        </span>
+
+                    </td>
+
+                </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <div class="report-footer">
+
+        LOGIS NINE · IoT Logistics Monitoring Report
+
+    </div>
+
+
+</main>
+
+
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e5f142083f04eaf08c8f4a10ec29a330">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js">
+</script>
+
+<script th:src="@{/js/shipment-report.js}">
+</script>
+
+<script th:src="@{/js/shipment-report.js}">
+</script>
+
+
+</body>
+</html>
