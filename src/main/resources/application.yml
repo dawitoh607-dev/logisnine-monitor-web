@@ -1,5 +1,6 @@
 spring:
-  application: name=monitor-web
+  application:
+    name: monitor-web
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -9,6 +10,12 @@ spring:
 
   thymeleaf:
     cache: false
+
+app:
+  security:
+    admin:
+      username: ${APP_ADMIN_USERNAME:admin}
+      password: ${APP_ADMIN_PASSWORD}
 
 mybatis:
   mapper-locations: classpath:/mapper/**/*.xml

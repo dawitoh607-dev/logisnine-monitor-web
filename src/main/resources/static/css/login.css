@@ -1,0 +1,249 @@
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+
+body {
+    font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            "Pretendard",
+            "Segoe UI",
+            sans-serif;
+
+    background: #f4f7fb;
+
+    color: #17233b;
+}
+
+
+.login-page {
+
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+
+.login-card {
+
+    width: 100%;
+    max-width: 400px;
+
+    padding: 32px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1e7ef;
+    border-radius: 18px;
+
+    box-shadow:
+            0 12px 35px
+            rgba(20, 40, 70, 0.08);
+}
+
+
+.logo {
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 30px;
+}
+
+
+.logo-mark {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #173f77;
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 800;
+}
+
+
+.logo-text {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.logo-text strong {
+
+    color: #173f77;
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+
+.logo-text span {
+
+    color: #8996a8;
+
+    font-size: 12px;
+}
+
+
+.login-title {
+
+    margin-bottom: 24px;
+}
+
+
+.login-title h1 {
+
+    margin: 0 0 7px;
+
+    font-size: 24px;
+}
+
+
+.login-title p {
+
+    margin: 0;
+
+    color: #7b899c;
+
+    font-size: 13px;
+}
+
+
+.form-group {
+
+    margin-bottom: 17px;
+}
+
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #455469;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.form-group input {
+
+    width: 100%;
+    height: 46px;
+
+    padding: 0 13px;
+
+    border: 1px solid #d9e0e9;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #17233b;
+
+    font-size: 14px;
+}
+
+
+.form-group input:focus-visible {
+
+    border-color: #287cff;
+
+    outline: 2px solid rgba(40, 124, 255, 0.18);
+    outline-offset: 1px;
+}
+
+
+.login-button {
+
+    width: 100%;
+    height: 48px;
+
+    margin-top: 5px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #173f77;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+
+.login-button:hover {
+
+    background: #123561;
+}
+
+
+.login-message {
+
+    margin-bottom: 18px;
+
+    padding: 11px 12px;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.login-message.error {
+
+    background: #fff1f1;
+
+    color: #c24141;
+}
+
+
+.login-message.success {
+
+    background: #edf9f2;
+
+    color: #08794b;
+}
+
+
+.login-footer {
+
+    margin-top: 25px;
+
+    color: #a0aab8;
+
+    text-align: center;
+
+    font-size: 11px;
+}
