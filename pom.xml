@@ -86,21 +86,47 @@
     </dependencies>
 
     <build>
+
+        <!--
+            application 설정 파일은 JAR에 포함하지 않는다.
+            templates, static, mapper XML 등 나머지 resources는 정상 포함된다.
+        -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>application.yml</exclude>
+                    <exclude>application.yaml</exclude>
+                    <exclude>application.properties</exclude>
+
+                    <exclude>application-*.yml</exclude>
+                    <exclude>application-*.yaml</exclude>
+                    <exclude>application-*.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <plugins>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+
                 <executions>
+
                     <execution>
                         <id>default-compile</id>
                         <phase>compile</phase>
+
                         <goals>
                             <goal>compile</goal>
                         </goals>
+
                         <configuration>
                             <annotationProcessorPaths>
                                 <path>
@@ -110,12 +136,15 @@
                             </annotationProcessorPaths>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>default-testCompile</id>
                         <phase>test-compile</phase>
+
                         <goals>
                             <goal>testCompile</goal>
                         </goals>
+
                         <configuration>
                             <annotationProcessorPaths>
                                 <path>
@@ -125,9 +154,12 @@
                             </annotationProcessorPaths>
                         </configuration>
                     </execution>
+
                 </executions>
             </plugin>
+
         </plugins>
+
     </build>
 
 </project>

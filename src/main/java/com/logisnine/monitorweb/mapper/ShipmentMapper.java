@@ -3,6 +3,7 @@ package com.logisnine.monitorweb.mapper;
 import com.logisnine.monitorweb.domain.Shipment;
 import com.logisnine.monitorweb.dto.DriverCheckInForm;
 import com.logisnine.monitorweb.dto.DriverCheckInView;
+import com.logisnine.monitorweb.dto.DashboardEventView;
 import com.logisnine.monitorweb.dto.JudgementRuleView;
 import com.logisnine.monitorweb.dto.LatestReadingView;
 import com.logisnine.monitorweb.dto.MapAlertView;
@@ -23,11 +24,7 @@ public interface ShipmentMapper {
 
     ShipmentDetailView findDetailById(@Param("shipmentId") Long shipmentId);
 
-    List<LatestReadingView> findLatestReadings(
-            @Param("shipmentId") Long shipmentId,
-            @Param("startedAt") LocalDateTime startedAt,
-            @Param("endedAt") LocalDateTime endedAt
-    );
+    List<LatestReadingView> findLatestReadings(@Param("shipmentId") Long shipmentId);
 
     List<ShipmentDetailView.AlertView> findAlertsByShipmentId(@Param("shipmentId") Long shipmentId);
 
@@ -47,6 +44,8 @@ public interface ShipmentMapper {
     List<MapAlertView> findMapAlerts(@Param("shipmentId") Long shipmentId);
 
     List<ShipmentListView> findShipmentList();
+
+    List<DashboardEventView> findRecentDashboardEvents();
 
 
     List<JudgementRuleView> findEnabledRules();
@@ -78,9 +77,5 @@ public interface ShipmentMapper {
 
     int deleteShipment(@Param("shipmentId") Long shipmentId);
 
-    ShipmentReportSensorSummaryView findReportSensorSummary(
-            @Param("shipmentId") Long shipmentId,
-            @Param("startedAt") LocalDateTime startedAt,
-            @Param("endedAt") LocalDateTime endedAt
-    );
+    ShipmentReportSensorSummaryView findReportSensorSummary(@Param("shipmentId") Long shipmentId);
 }

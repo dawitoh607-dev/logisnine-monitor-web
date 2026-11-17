@@ -1,443 +1,391 @@
 <!DOCTYPE html>
-
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>LOGIS NINE - 실시간 운송 관제</title>
 
-    <title>LOGIS NINE - 운송 목록</title>
-
-
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <link rel="stylesheet" th:href="@{/css/shipment-list.css}">
 
-    <!-- CSS -->
-    <link rel="stylesheet"
-          th:href="@{/css/shipment-list.css}">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript"
+            src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e5f142083f04eaf08c8f4a10ec29a330"></script>
 </head>
 
-
 <body>
-
-
-<!-- =====================================================
-     HEADER
-====================================================== -->
 
 <header class="header">
 
     <div class="logo">
-
         <i class="bi bi-truck"></i>
-
-        <span>
-            LOGIS
-            <strong>NINE</strong>
-        </span>
-
+        <span>LOGIS <strong>NINE</strong></span>
     </div>
 
-
-    <button class="menu-button">
-
+    <button class="menu-button" type="button">
         <i class="bi bi-list"></i>
-
     </button>
 
 </header>
 
+<main class="dashboard-shell">
 
-
-<!-- =====================================================
-     MAIN
-====================================================== -->
-
-<main class="container">
-
-
-    <!-- =================================================
-         TITLE
-    ================================================== -->
-
-    <section class="page-header">
-
-        <div>
-
-            <h1>
-                운송 현황
-            </h1>
-
-            <p>
-                등록된 운송과 실시간 상태를 확인합니다.
-            </p>
-
-        </div>
-
-
-        <a th:href="@{/shipments/register}"
-           class="register-button">
-
-            <i class="bi bi-plus-lg"></i>
-            신규 등록
-
-        </a>
-
-    </section>
-
-
-
-    <!-- =================================================
-         STATUS FILTER
-    ================================================== -->
-
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
     <nav class="status-filter">
 
-
-        <!-- 전체 -->
-
         <a th:href="@{/shipments(status='ALL')}"
-           class="filter-item"
            th:classappend="${selectedStatus == 'ALL'} ? ' active'">
-
-            <span>
-                전체
-            </span>
-
-            <strong th:text="${totalCount}">
-                4
-            </strong>
-
+            전체
+            <span class="filter-count"
+                  th:text="${totalCount}">0</span>
         </a>
-
-
-        <!-- 운송중 -->
 
         <a th:href="@{/shipments(status='IN_PROGRESS')}"
-           class="filter-item"
            th:classappend="${selectedStatus == 'IN_PROGRESS'} ? ' active'">
-
-            <span>
-                운송중
-            </span>
-
-            <strong th:text="${inProgressCount}">
-                2
-            </strong>
-
+            운송중
+            <span class="filter-count"
+                  th:text="${inProgressCount}">0</span>
         </a>
-
-
-        <!-- 운송대기 -->
 
         <a th:href="@{/shipments(status='READY')}"
-           class="filter-item"
            th:classappend="${selectedStatus == 'READY'} ? ' active'">
-
-            <span>
-                운송대기
-            </span>
-
-            <strong th:text="${readyCount}">
-                1
-            </strong>
-
+            운송대기
+            <span class="filter-count"
+                  th:text="${readyCount}">0</span>
         </a>
-
-
-        <!-- 완료 -->
 
         <a th:href="@{/shipments(status='COMPLETED')}"
-           class="filter-item"
            th:classappend="${selectedStatus == 'COMPLETED'} ? ' active'">
-
-            <span>
-                완료
-            </span>
-
-            <strong th:text="${completedCount}">
-                1
-            </strong>
-
+            완료
+            <span class="filter-count"
+                  th:text="${completedCount}">0</span>
         </a>
 
+        <a th:href="@{/shipments/register}"
+           class="shipment-create-filter"
+           aria-label="운송 등록"
+           title="운송 등록">
+            <i class="bi bi-plus-lg"></i>
+        </a>
 
     </nav>
 
 
-
-    <!-- =================================================
-         EMPTY
-    ================================================== -->
-
-    <div class="empty-state"
-         th:if="${shipments == null or #lists.isEmpty(shipments)}">
-
-        <i class="bi bi-inbox"></i>
-
-        <strong>
-            운송 내역이 없습니다.
-        </strong>
-
-        <span>
-            해당 상태의 운송이 없습니다.
-        </span>
-
-    </div>
-
-
-
-    <!-- =================================================
-         SHIPMENT LIST
-    ================================================== -->
-
-    <section class="shipment-list"
-             th:if="${shipments != null and !#lists.isEmpty(shipments)}">
-
-
-        <a class="shipment-card"
-
-           th:each="shipment : ${shipments}"
-
-           th:href="@{/shipments/{id}(id=${shipment.shipmentId})}">
-
-
-            <!-- =========================================
-                 카드 상단
-            ========================================== -->
-
-            <div class="shipment-card-header">
-
-
-                <div class="shipment-number">
-
-                    운송 #
-
-                    <strong th:text="${shipment.shipmentId}">
-                        4
-                    </strong>
-
-                </div>
-
-
-                <span class="status-badge"
-
-                      th:classappend="${shipment.status == 'IN_PROGRESS'}
-                            ? ' in-progress'
-                            : (${shipment.status == 'COMPLETED'}
-                                ? ' completed'
-                                : ' ready')"
-
-                      th:text="${shipment.statusName}">
-
-                    운송중
-
-                </span>
-
-
+    <!-- =====================================================
+         MAP
+    ====================================================== -->
+    <section class="dashboard-card map-section">
+        <div class="section-heading map-heading">
+            <div>
+                <h1>실시간 운송 지도</h1>
             </div>
 
-
-
-            <!-- =========================================
-                 품목
-            ========================================== -->
-
-            <div class="cargo-name"
-                 th:text="${shipment.cargoName}">
-
-                냉동식품 운송
-
+            <div class="map-legend" aria-label="지도 상태 범례">
+                <span><i class="legend-dot normal"></i>정상</span>
+                <span><i class="legend-dot alert"></i>이탈</span>
+                <span><i class="legend-dot ready"></i>대기</span>
             </div>
-
-
-
-            <!-- =========================================
-                 ROUTE
-            ========================================== -->
-
-            <div class="route">
-
-                <span th:text="${shipment.departureLocation}">
-                    서울 물류센터
-                </span>
-
-                <i class="bi bi-arrow-right"></i>
-
-                <span th:text="${shipment.destinationLocation}">
-                    부산 물류센터
-                </span>
-
-            </div>
-
-
-
-            <!-- =========================================
-                 기본정보
-            ========================================== -->
-
-            <div class="shipment-meta">
-
-
-                <div>
-
-                    <i class="bi bi-truck"></i>
-
-                    <span th:text="${shipment.vehicleNumber != null
-                            ? shipment.vehicleNumber
-                            : '-'}">
-
-                        12가3456
-
-                    </span>
-
-                </div>
-
-
-                <div>
-
-                    <i class="bi bi-router"></i>
-
-                    <span th:text="${shipment.gatewayId}">
-
-                        GW-001
-
-                    </span>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- =========================================
-                 EVENT COUNT
-            ========================================== -->
-
-            <div class="event-summary">
-
-
-                <div class="event-item temperature">
-
-                    <i class="bi bi-thermometer-high"></i>
-
-                    <span>
-                        온도 이탈
-                    </span>
-
-                    <strong th:text="${shipment.tempDeviationCount + '건'}">
-                        2건
-                    </strong>
-
-                </div>
-
-
-                <div class="event-item shock">
-
-                    <i class="bi bi-activity"></i>
-
-                    <span>
-                        충격
-                    </span>
-
-                    <strong th:text="${shipment.shockCount + '건'}">
-                        1건
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- =========================================
-                 운송시간
-            ========================================== -->
-
-            <div class="shipment-period">
-
-
-                <!-- READY -->
-
-                <span th:if="${shipment.status == 'READY'}">
-
-                    <i class="bi bi-clock"></i>
-
-                    운송 시작 전
-
-                </span>
-
-
-                <!-- IN_PROGRESS -->
-
-                <span th:if="${shipment.status == 'IN_PROGRESS'}">
-
-                    <i class="bi bi-clock"></i>
-
-                    <span th:text="${#temporals.format(
-                            shipment.startedAt,
-                            'MM.dd HH:mm'
-                    )}">
-                        10.27 10:00
-                    </span>
-
-                    ~
-
-                    <strong>
-                        운송중
-                    </strong>
-
-                </span>
-
-
-                <!-- COMPLETED -->
-
-                <span th:if="${shipment.status == 'COMPLETED'}">
-
-                    <i class="bi bi-clock"></i>
-
-                    <span th:text="${#temporals.format(
-                            shipment.startedAt,
-                            'MM.dd HH:mm'
-                    )}">
-                        10.26 08:00
-                    </span>
-
-                    ~
-
-                    <span th:text="${#temporals.format(
-                            shipment.endedAt,
-                            'MM.dd HH:mm'
-                    )}">
-                        10.26 15:30
-                    </span>
-
-                </span>
-
-
-                <i class="bi bi-chevron-right card-arrow"></i>
-
-            </div>
-
-
-        </a>
-
-
+        </div>
+
+        <div id="dashboardMap" class="dashboard-map"></div>
+
+        <!-- 지도 생성용 데이터. 완료 운송은 지도에 표시하지 않는다. -->
+        <div class="dashboard-marker-data"
+             th:each="shipment : ${dashboardShipments}"
+             th:if="${shipment.status != 'COMPLETED'
+                    and shipment.markerLatitude != null
+                    and shipment.markerLongitude != null}"
+             th:data-shipment-id="${shipment.shipmentId}"
+             th:data-gateway-id="${shipment.gatewayId}"
+             th:data-vehicle-number="${shipment.vehicleNumber}"
+             th:data-cargo-name="${shipment.cargoName}"
+             th:data-status="${shipment.status}"
+             th:data-status-name="${shipment.statusName}"
+             th:data-latitude="${shipment.markerLatitude}"
+             th:data-longitude="${shipment.markerLongitude}"
+             th:data-temperature="${shipment.latestTemperature}"
+             th:data-humidity="${shipment.latestHumidity}"
+             th:data-battery="${shipment.latestBatteryPct}"
+             th:data-logger-id="${shipment.latestLoggerId}"
+             th:data-temp-count="${shipment.tempDeviationCount}"
+             th:data-shock-count="${shipment.shockCount}"
+             th:data-active-temp-alert="${shipment.activeTempAlertCount != null and shipment.activeTempAlertCount > 0}"
+             hidden>
+        </div>
     </section>
 
 
+    <!-- =====================================================
+         UNSELECTED HINT
+    ====================================================== -->
+    <section id="mapHint" class="map-hint">
+        <div class="hint-icon">
+            <i class="bi bi-hand-index-thumb"></i>
+        </div>
+        <p>지도에서 차량 핀을 터치하면 상세 정보를 확인할 수 있습니다.</p>
+    </section>
+
+
+    <!-- =====================================================
+         SELECTED SHIPMENT PANEL
+    ====================================================== -->
+    <section id="selectedShipmentPanel"
+             class="dashboard-card selected-shipment-panel"
+             hidden>
+
+        <div class="selected-panel-header">
+            <div class="selected-vehicle-title">
+                <div id="selectedVehicleIcon" class="selected-vehicle-icon">
+                    <i class="bi bi-truck"></i>
+                </div>
+
+                <div>
+                    <div class="selected-vehicle-row">
+                        <strong id="selectedVehicleNumber">-</strong>
+                        <span id="selectedAlertBadge" class="selected-alert-badge" hidden>온도 이탈</span>
+                    </div>
+                    <span id="selectedCargoName" class="selected-cargo-name">-</span>
+                </div>
+            </div>
+
+            <button id="closeSelectedPanel"
+                    class="panel-close-button"
+                    type="button"
+                    aria-label="선택 차량 닫기">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="selected-status-row">
+            <span id="selectedStatusBadge" class="selected-status-badge">운송중</span>
+            <span id="selectedGatewayId" class="selected-gateway">-</span>
+        </div>
+
+        <div class="selected-metrics">
+            <div class="temperature-card">
+                <span><i class="bi bi-thermometer-half"></i> 현재 온도</span>
+                <strong id="selectedTemperature">-</strong>
+                <small id="selectedHumidity">습도 -</small>
+            </div>
+
+            <div class="mini-chart-card">
+                <div class="mini-chart-title">온도 추이</div>
+                <div class="mini-chart-wrap">
+                    <canvas id="dashboardTemperatureChart"></canvas>
+                    <div id="dashboardChartEmpty" class="chart-empty" hidden>측정 데이터 없음</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="selected-event-grid">
+            <div class="selected-event-stat temperature">
+                <i class="bi bi-thermometer-high"></i>
+                <span>온도 이탈</span>
+                <strong id="selectedTempCount">0건</strong>
+            </div>
+
+            <div class="selected-event-stat shock">
+                <i class="bi bi-activity"></i>
+                <span>충격</span>
+                <strong id="selectedShockCount">0건</strong>
+            </div>
+
+            <div class="selected-event-stat door disabled">
+                <i class="bi bi-door-open"></i>
+                <span>문 열림</span>
+                <strong>-</strong>
+            </div>
+        </div>
+
+        <div class="selected-panel-actions">
+            <a id="selectedDetailLink" class="panel-action secondary" href="#">
+                <i class="bi bi-layout-text-window-reverse"></i>
+                상세 보기
+            </a>
+
+            <button id="selectedReportButton" class="panel-action primary" type="button">
+                <i class="bi bi-file-earmark-text"></i>
+                리포트 보기
+            </button>
+        </div>
+    </section>
+
+
+    <!-- =====================================================
+         RECENT EVENTS
+    ====================================================== -->
+    <section class="dashboard-card recent-events-section">
+        <div class="section-heading compact">
+            <div class="section-title-with-icon">
+                <i class="bi bi-clock-history"></i>
+                <h2>최근 이벤트</h2>
+            </div>
+        </div>
+
+        <div class="recent-event-empty"
+             th:if="${recentEvents == null or #lists.isEmpty(recentEvents)}">
+            최근 발생한 이벤트가 없습니다.
+        </div>
+
+        <div class="recent-event-list"
+             th:if="${recentEvents != null and !#lists.isEmpty(recentEvents)}">
+
+            <a class="recent-event-item"
+               th:each="event : ${recentEvents}"
+               th:href="@{/shipments/{id}(id=${event.shipmentId})}"
+               th:classappend="${event.alertType == 'TEMP_HIGH' or event.alertType == 'TEMP_LOW'} ? ' temperature' : ' shock'">
+
+                <div class="event-symbol">
+                    <i th:if="${event.alertType == 'TEMP_HIGH' or event.alertType == 'TEMP_LOW'}"
+                       class="bi bi-thermometer-high"></i>
+                    <i th:if="${event.alertType == 'SHOCK'}"
+                       class="bi bi-activity"></i>
+                </div>
+
+                <time th:text="${event.detectedAt != null ? #temporals.format(event.detectedAt, 'HH:mm') : '--:--'}">
+                    15:31
+                </time>
+
+                <div class="event-copy">
+                    <strong th:if="${event.alertType == 'TEMP_HIGH'}">온도 상한 이탈</strong>
+                    <strong th:if="${event.alertType == 'TEMP_LOW'}">온도 하한 이탈</strong>
+                    <strong th:if="${event.alertType == 'SHOCK'}">충격 감지</strong>
+
+                    <span>
+                        <span th:text="${event.vehicleNumber != null ? event.vehicleNumber : event.gatewayId}">23나4567</span>
+                        <th:block th:if="${event.alertType == 'SHOCK' and event.extremeValue != null}">
+                            · <span th:text="${#numbers.formatDecimal(event.extremeValue, 1, 1) + 'G'}">6.8G</span>
+                        </th:block>
+                        <th:block th:if="${(event.alertType == 'TEMP_HIGH' or event.alertType == 'TEMP_LOW') and event.extremeValue != null}">
+                            · <span th:text="${#numbers.formatDecimal(event.extremeValue, 1, 1) + '℃'}">9.2℃</span>
+                        </th:block>
+                    </span>
+                </div>
+
+                <i class="bi bi-chevron-right event-chevron"></i>
+            </a>
+        </div>
+    </section>
+
+
+    <!-- =====================================================
+         SHIPMENT LIST
+    ====================================================== -->
+    <section class="shipments-section">
+        <div class="shipment-list-heading">
+            <div>
+                <h2 th:text="${selectedStatus == 'ALL' ? '운송 목록' : '선택한 운송'}">운송 목록</h2>
+            </div>
+
+            <a th:if="${selectedStatus != 'ALL'}"
+               th:href="@{/shipments(status='ALL')}"
+               class="view-all-link">
+                전체 보기
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+
+        <div class="empty-state"
+             th:if="${shipments == null or #lists.isEmpty(shipments)}">
+            <i class="bi bi-inbox"></i>
+            <strong>운송 내역이 없습니다.</strong>
+            <span>선택한 상태의 운송이 없습니다.</span>
+        </div>
+
+        <div class="shipment-list"
+             th:if="${shipments != null and !#lists.isEmpty(shipments)}">
+
+            <a class="shipment-card"
+               th:each="shipment : ${shipments}"
+               th:href="@{/shipments/{id}(id=${shipment.shipmentId})}">
+
+                <div class="shipment-card-main">
+                    <div class="shipment-card-icon"
+                         th:classappend="${shipment.activeTempAlertCount != null and shipment.activeTempAlertCount > 0}
+                            ? ' alert'
+                            : (${shipment.status == 'READY'} ? ' ready' : ' normal')">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+
+                    <div class="shipment-card-copy">
+                        <div class="shipment-card-title-row">
+                            <strong th:text="${shipment.vehicleNumber != null ? shipment.vehicleNumber : shipment.gatewayId}">
+                                23나4567
+                            </strong>
+
+                            <span class="compact-status-badge"
+                                  th:classappend="${shipment.activeTempAlertCount != null and shipment.activeTempAlertCount > 0}
+                                    ? ' alert'
+                                    : (${shipment.status == 'READY'}
+                                        ? ' ready'
+                                        : (${shipment.status == 'COMPLETED'} ? ' completed' : ' normal'))"
+                                  th:text="${shipment.activeTempAlertCount != null and shipment.activeTempAlertCount > 0
+                                        ? '온도이탈'
+                                        : (shipment.status == 'READY'
+                                            ? '운송대기'
+                                            : (shipment.status == 'IN_PROGRESS'
+                                                ? '운송중'
+                                                : (shipment.status == 'COMPLETED'
+                                                    ? '완료'
+                                                    : shipment.status)))}">
+                                정상 운송
+                            </span>
+                        </div>
+
+                        <div class="shipment-card-cargo" th:text="${shipment.cargoName}">신선식품</div>
+
+                        <div class="shipment-card-route">
+                            <span th:text="${shipment.departureLocation}">서울</span>
+                            <i class="bi bi-arrow-right"></i>
+                            <span th:text="${shipment.destinationLocation}">부산</span>
+                        </div>
+                    </div>
+
+                    <div class="shipment-card-side">
+                        <span class="card-temperature"
+                              th:if="${shipment.latestTemperature != null}"
+                              th:text="${#numbers.formatDecimal(shipment.latestTemperature, 1, 1) + '℃'}">
+                            5.1℃
+                        </span>
+
+                        <span class="card-temperature empty"
+                              th:if="${shipment.latestTemperature == null}">
+                            -
+                        </span>
+
+                        <i class="bi bi-chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="shipment-card-footer">
+                    <span>
+                        <i class="bi bi-router"></i>
+                        <span th:text="${shipment.gatewayId}">GW-001</span>
+                    </span>
+
+                    <span th:if="${shipment.tempDeviationCount != null and shipment.tempDeviationCount > 0}">
+                        <i class="bi bi-thermometer-high"></i>
+                        온도 <strong th:text="${shipment.tempDeviationCount + '건'}">1건</strong>
+                    </span>
+
+                    <span th:if="${shipment.shockCount != null and shipment.shockCount > 0}">
+                        <i class="bi bi-activity"></i>
+                        충격 <strong th:text="${shipment.shockCount + '건'}">1건</strong>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </section>
+
 </main>
 
-
+<script th:src="@{/js/shipment-dashboard.js}"></script>
 </body>
-
 </html>

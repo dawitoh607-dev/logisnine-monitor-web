@@ -3,10 +3,13 @@ spring:
     name: monitor-web
 
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.231.110:5432/totw5701
-    username: postgres
-    password: mnwise4210
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://192.168.231.110:5432/totw5701
+#    username: postgres
+#    password: mnwise4210
+    url: jdbc:postgresql://127.0.0.1:15432/logisnine
+    username: logisnine_admin
+    password: rR89FCSp8y8mDPr
 
   thymeleaf:
     cache: false

@@ -1,6 +1,7 @@
 package com.logisnine.monitorweb.service;
 
 import com.logisnine.monitorweb.dto.JudgementRuleView;
+import com.logisnine.monitorweb.dto.DashboardEventView;
 import com.logisnine.monitorweb.dto.LatestReadingView;
 import com.logisnine.monitorweb.dto.MapAlertView;
 import com.logisnine.monitorweb.dto.ReadingChartView;
@@ -41,7 +42,7 @@ public class ShipmentService {
 
         if (shipment.getStartedAt() != null) {
 
-            List<LatestReadingView> latestReadings = shipmentMapper.findLatestReadings(shipment.getShipmentId(), shipment.getStartedAt(), shipment.getEndedAt());
+            List<LatestReadingView> latestReadings = shipmentMapper.findLatestReadings(shipment.getShipmentId());
 
             applyReceiveStatus(latestReadings);
 
@@ -125,6 +126,10 @@ public class ShipmentService {
         });
 
         return shipments;
+    }
+
+    public List<DashboardEventView> findRecentDashboardEvents() {
+        return shipmentMapper.findRecentDashboardEvents();
     }
 
     @Transactional
@@ -276,7 +281,7 @@ public class ShipmentService {
         }
 
 
-        ShipmentReportSensorSummaryView sensorSummary = shipmentMapper.findReportSensorSummary(shipmentId, shipment.getStartedAt(), shipment.getEndedAt());
+        ShipmentReportSensorSummaryView sensorSummary = shipmentMapper.findReportSensorSummary(shipmentId);
 
 
         /*
@@ -291,7 +296,7 @@ public class ShipmentService {
         }
 
 
-        java.time.Duration duration = java.time.Duration.between(shipment.getStartedAt(), shipment.getEndedAt());
+        Duration duration = Duration.between(shipment.getStartedAt(), shipment.getEndedAt());
 
 
         long hours = duration.toHours();

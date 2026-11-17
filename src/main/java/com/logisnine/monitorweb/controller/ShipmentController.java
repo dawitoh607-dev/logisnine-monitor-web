@@ -1,5 +1,6 @@
 package com.logisnine.monitorweb.controller;
 
+import com.logisnine.monitorweb.dto.DashboardEventView;
 import com.logisnine.monitorweb.dto.MapAlertView;
 import com.logisnine.monitorweb.dto.ReadingChartView;
 import com.logisnine.monitorweb.dto.RoutePointView;
@@ -58,43 +59,46 @@ public class ShipmentController {
     public String list(@RequestParam(defaultValue = "ALL") String status, Model model) {
 
         List<ShipmentListView> allShipments = shipmentService.findShipmentList();
+        List<DashboardEventView> recentEvents = shipmentService.findRecentDashboardEvents();
 
         // =====================================================
-        // 상태별 건수
+        // 대시보드 요약
         // =====================================================
 
         long totalCount = allShipments.size();
-
         long readyCount = allShipments.stream().filter(s -> "READY".equals(s.getStatus())).count();
-
         long inProgressCount = allShipments.stream().filter(s -> "IN_PROGRESS".equals(s.getStatus())).count();
-
         long completedCount = allShipments.stream().filter(s -> "COMPLETED".equals(s.getStatus())).count();
-
+        long temperatureAlertCount = allShipments.stream()
+                .filter(s -> "IN_PROGRESS".equals(s.getStatus()))
+                .filter(s -> s.getActiveTempAlertCount() != null && s.getActiveTempAlertCount() > 0)
+                .count();
 
         // =====================================================
-        // 필터
+        // 하단 카드 목록 필터
+        // 지도는 필터와 관계없이 READY / IN_PROGRESS 전체를 유지한다.
         // =====================================================
 
         List<ShipmentListView> shipments;
 
-
         if ("ALL".equals(status)) {
             shipments = allShipments;
         } else {
-            shipments = allShipments.stream().filter(s -> status.equals(s.getStatus())).toList();
+            shipments = allShipments.stream()
+                    .filter(s -> status.equals(s.getStatus()))
+                    .toList();
         }
 
-        // =====================================================
-        // Model
-        // =====================================================
-
+        model.addAttribute("dashboardShipments", shipments);
+        model.addAttribute("recentEvents", recentEvents);
         model.addAttribute("shipments", shipments);
         model.addAttribute("selectedStatus", status);
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("readyCount", readyCount);
         model.addAttribute("inProgressCount", inProgressCount);
         model.addAttribute("completedCount", completedCount);
+        model.addAttribute("temperatureAlertCount", temperatureAlertCount);
+
 
         return "shipment/list";
     }
