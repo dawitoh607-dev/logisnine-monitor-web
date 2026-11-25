@@ -367,7 +367,11 @@
                 <div class="shipment-card-footer">
                     <span>
                         <i class="bi bi-router"></i>
-                        <span th:text="${shipment.gatewayId}">GW-001</span>
+                        <span th:text="${shipment.gatewayId != null
+                                ? shipment.gatewayId
+                                : '미연결'}">
+                            미연결
+                        </span>
                     </span>
 
                     <span th:if="${shipment.tempDeviationCount != null and shipment.tempDeviationCount > 0}">

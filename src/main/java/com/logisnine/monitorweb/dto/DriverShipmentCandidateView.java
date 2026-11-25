@@ -5,11 +5,11 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class DriverCheckInView {
+public class DriverShipmentCandidateView {
 
     private Long shipmentId;
 
-    private String gatewayId;
+    private String vehicleNumber;
 
     private String cargoName;
 
@@ -18,6 +18,4 @@ public class DriverCheckInView {
     private String destinationLocation;
 
     private LocalDateTime plannedDepartureAt;
-
-    private String driverPhone;
 }

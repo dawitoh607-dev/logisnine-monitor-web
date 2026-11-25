@@ -66,267 +66,491 @@
 
 <main class="page-container">
 
+    <section class="intro-card">
 
-    <!-- 배정된 운송이 없는 경우 -->
+        <div>
+            <h1>
+                Gateway 연결
+            </h1>
 
-    <section class="error-card"
-             th:if="${shipment == null}">
-
-        <div class="error-icon">
-            !
+            <p>
+                운송 차량번호와 기사 정보를 입력해 주세요.
+            </p>
         </div>
-
-        <h1>
-            운송 정보를 찾을 수 없습니다.
-        </h1>
-
-        <p>
-            현재 이 Gateway에 배정된
-            운송건이 없습니다.
-        </p>
-
-        <p class="error-help">
-            Gateway가 정상적으로 배정되었는지
-            담당자에게 확인해 주세요.
-        </p>
 
     </section>
 
 
-    <!-- 정상 운송 -->
+    <section class="shipment-card">
 
-    <div th:if="${shipment != null}">
+        <div class="card-title">
+            연결할 Gateway
+        </div>
 
+        <div class="shipment-meta">
 
-        <section class="intro-card">
+        <span>
+            Gateway
+        </span>
 
-            <div class="intro-icon">
+            <strong th:text="${driverForm.gatewayId}">
+                TEST-GW-001
+            </strong>
 
-                <svg viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2">
+        </div>
 
-                    <path d="M3 7h11v9H3z"/>
-                    <path d="M14 10h4l3 3v3h-7z"/>
-
-                    <circle cx="7"
-                            cy="18"
-                            r="2"/>
-
-                    <circle cx="18"
-                            cy="18"
-                            r="2"/>
-
-                </svg>
-
-            </div>
-
-            <div>
-
-                <h1>
-                    운송기사 정보 입력
-                </h1>
-
-                <p>
-                    운송 정보를 확인한 후
-                    기사 정보를 입력해 주세요.
-                </p>
-
-            </div>
-
-        </section>
+    </section>
 
 
-        <!-- 운송 정보 -->
+    <form th:action="@{/driver/check-in/search}"
+          th:object="${driverForm}"
+          method="post">
 
-        <section class="shipment-card">
+        <input type="hidden"
+               th:field="*{gatewayId}">
+
+
+        <section class="driver-card">
 
             <div class="card-title">
-                배정된 운송
+                차량 확인
             </div>
 
 
-            <div class="shipment-number">
+            <div class="field-group">
 
-                운송 #
+                <label for="vehicleNumber">
+                    차량번호
+                </label>
 
-                <strong th:text="${shipment.shipmentId}">
-                    5
-                </strong>
-
-            </div>
-
-
-            <div class="cargo-name"
-                 th:text="${shipment.cargoName}">
-                냉동식품 운송
-            </div>
-
-
-            <div class="route-box">
-
-                <div class="route-place">
-
-                    <span class="route-label">
-                        출발
-                    </span>
-
-                    <strong th:text="${shipment.departureLocation}">
-                        서울 물류센터
-                    </strong>
-
-                </div>
-
-
-                <div class="route-arrow">
-                    →
-                </div>
-
-
-                <div class="route-place destination">
-
-                    <span class="route-label">
-                        도착
-                    </span>
-
-                    <strong th:text="${shipment.destinationLocation}">
-                        부산 물류센터
-                    </strong>
-
-                </div>
+                <input type="text"
+                       id="vehicleNumber"
+                       th:field="*{vehicleNumber}"
+                       placeholder="예: 12가3456"
+                       required>
 
             </div>
 
 
-            <div class="shipment-meta">
+            <div class="field-group">
 
-                <span>
-                    예정 시각
-                </span>
+                <label for="driverName">
+                    기사 성함
+                </label>
 
-                <strong th:text="${shipment.plannedDepartureAt != null
-                    ? #temporals.format(
-                        shipment.plannedDepartureAt,
-                        'yyyy.MM.dd HH:mm'
-                      )
-                    : '-'}">
-
-                    2026.11.04 15:00
-
-                </strong>
+                <input type="text"
+                       id="driverName"
+                       th:field="*{driverName}"
+                       required>
 
             </div>
 
 
-            <div class="shipment-meta">
+            <div class="field-group">
 
-                <span>
-                    Gateway
-                </span>
+                <label for="driverPhone">
+                    연락처
+                </label>
 
-                <strong th:text="${shipment.gatewayId}">
-                    GW-001
-                </strong>
+                <input type="tel"
+                       id="driverPhone"
+                       th:field="*{driverPhone}"
+                       required>
 
             </div>
 
         </section>
 
 
-        <!-- 기사 입력 -->
-
-        <form th:action="@{/driver/check-in}"
-              th:object="${driverForm}"
-              method="post">
-
-
-            <section class="driver-card">
-
-                <div class="card-title">
-                    기사 정보
-                </div>
+        <div class="notice">
+            차량번호를 기준으로 등록된 운송건과
+            현재 Gateway를 연결합니다.
+        </div>
 
 
-                <input type="hidden"
-                       th:field="*{shipmentId}">
+        <button type="submit"
+                class="submit-button">
 
-                <input type="hidden"
-                       th:field="*{gatewayId}">
+            운송 조회
 
+        </button>
 
-                <div class="field-group">
+    </form>
 
-                    <label for="driverName">
-                        성함
-                    </label>
+    <div id="shipmentSelectModal"
+         class="shipment-modal"
+         th:classappend="${candidates != null and !candidates.isEmpty()} ? ' open'">
 
-                    <input type="text"
-                           id="driverName"
-                           th:field="*{driverName}"
-                           placeholder="성함을 입력해 주세요"
-                           autocomplete="name"
-                           required>
+        <div class="shipment-modal-backdrop"
+             onclick="closeShipmentModal()">
+        </div>
 
-                </div>
+        <div class="shipment-modal-sheet">
 
+            <!-- =========================
+                 STEP 1 : 운송 선택
+            ========================== -->
+            <div id="shipmentSelectStep">
 
-                <div class="field-group">
+                <div class="modal-handle"></div>
 
-                    <label for="driverPhone">
-                        연락처
-                    </label>
+                <div class="modal-header">
 
-                    <input type="tel"
-                           id="driverPhone"
-                           th:field="*{driverPhone}"
-                           placeholder="010-1234-5678"
-                           inputmode="tel"
-                           autocomplete="tel"
-                           required>
+                    <div>
+                        <h2>연결할 운송을 선택하세요</h2>
 
-                </div>
+                        <p>
+                            입력한 차량번호에 등록된 운송
+                            <strong th:text="${candidates != null ? candidates.size() : 0}">
+                                0
+                            </strong>건
+                        </p>
+                    </div>
 
-
-                <div class="field-group">
-
-                    <label for="vehicleNumber">
-                        차량번호
-                    </label>
-
-                    <input type="text"
-                           id="vehicleNumber"
-                           th:field="*{vehicleNumber}"
-                           placeholder="예: 12가3456"
-                           required>
+                    <button type="button"
+                            class="modal-close"
+                            onclick="closeShipmentModal()">
+                        ×
+                    </button>
 
                 </div>
 
-            </section>
+
+                <div class="shipment-select-list">
+
+                    <button type="button"
+                            class="shipment-select-item"
+                            th:each="shipment : ${candidates}"
+
+                            th:attr="
+                            data-shipment-id=${shipment.shipmentId},
+                            data-vehicle-number=${shipment.vehicleNumber},
+                            data-cargo-name=${shipment.cargoName},
+                            data-departure=${shipment.departureLocation},
+                            data-destination=${shipment.destinationLocation},
+                            data-planned-at=${shipment.plannedDepartureAt}
+                        "
+
+                            onclick="selectShipment(this)">
+
+                        <div class="select-item-time">
+
+                            <i class="bi bi-clock"></i>
+
+                            <strong th:if="${shipment.plannedDepartureAt != null}"
+                                    th:text="${#temporals.format(
+                                    shipment.plannedDepartureAt,
+                                    'MM/dd HH:mm'
+                                )}">
+                                11/23 14:00
+                            </strong>
+
+                            <strong th:if="${shipment.plannedDepartureAt == null}">
+                                출발시간 미정
+                            </strong>
+
+                        </div>
 
 
-            <div class="notice">
+                        <div class="select-item-route">
 
-                입력하신 정보는
-                현재 운송건에 기사 및 차량정보로
-                등록됩니다.
+                            <div>
+                                <small>출발</small>
+                                <strong th:text="${shipment.departureLocation}">
+                                    군포 물류센터
+                                </strong>
+                            </div>
+
+                            <i class="bi bi-arrow-right"></i>
+
+                            <div>
+                                <small>도착</small>
+                                <strong th:text="${shipment.destinationLocation}">
+                                    안양 물류센터
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="select-item-footer">
+
+                        <span>
+                            <i class="bi bi-box-seam"></i>
+
+                            <span th:text="${shipment.cargoName}">
+                                냉동식품
+                            </span>
+                        </span>
+
+                            <i class="bi bi-chevron-right"></i>
+
+                        </div>
+
+                    </button>
+
+                </div>
 
             </div>
 
 
-            <button type="submit"
-                    class="submit-button">
+            <!-- =========================
+                 STEP 2 : 최종 확인
+            ========================== -->
+            <div id="shipmentConfirmStep"
+                 style="display:none;">
 
-                운송 정보 제출
+                <div class="modal-handle"></div>
 
-            </button>
+                <div class="confirm-icon">
+                    <i class="bi bi-truck"></i>
+                </div>
 
-        </form>
+                <h2 class="confirm-title">
+                    이 운송을 선택하시겠습니까?
+                </h2>
+
+                <p class="confirm-description">
+                    연결할 운송 정보를 다시 확인해 주세요.
+                </p>
+
+
+                <div class="confirm-info">
+
+                    <div class="confirm-row">
+                        <span>Gateway</span>
+
+                        <strong th:text="${driverForm.gatewayId}">
+                            TEST-GW-001
+                        </strong>
+                    </div>
+
+                    <div class="confirm-row">
+                        <span>차량번호</span>
+                        <strong id="confirmVehicleNumber">-</strong>
+                    </div>
+
+                    <div class="confirm-row">
+                        <span>품목</span>
+                        <strong id="confirmCargoName">-</strong>
+                    </div>
+
+                    <div class="confirm-row">
+                        <span>출발</span>
+                        <strong id="confirmDeparture">-</strong>
+                    </div>
+
+                    <div class="confirm-row">
+                        <span>도착</span>
+                        <strong id="confirmDestination">-</strong>
+                    </div>
+
+                    <div class="confirm-row">
+                        <span>출발 예정</span>
+                        <strong id="confirmPlannedAt">-</strong>
+                    </div>
+
+                </div>
+
+
+                <form th:action="@{/driver/check-in/confirm}"
+                      method="post">
+
+                    <input type="hidden"
+                           name="shipmentId"
+                           id="confirmShipmentId">
+
+                    <input type="hidden"
+                           name="gatewayId"
+                           th:value="${driverForm.gatewayId}">
+
+                    <input type="hidden"
+                           name="vehicleNumber"
+                           th:value="${driverForm.vehicleNumber}">
+
+                    <input type="hidden"
+                           name="driverName"
+                           th:value="${driverForm.driverName}">
+
+                    <input type="hidden"
+                           name="driverPhone"
+                           th:value="${driverForm.driverPhone}">
+
+
+                    <div class="confirm-actions">
+
+                        <button type="button"
+                                class="cancel-button"
+                                onclick="backToShipmentList()">
+                            이전
+                        </button>
+
+                        <button type="submit"
+                                class="confirm-button">
+                            이 운송 연결
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
 
     </div>
 
+    <div id="shipmentConfirmModal"
+         class="confirm-modal">
 
+        <div class="confirm-modal-backdrop"
+             onclick="closeShipmentConfirm()">
+        </div>
+
+
+        <div class="confirm-modal-sheet">
+
+            <div class="confirm-icon">
+                <i class="bi bi-truck"></i>
+            </div>
+
+
+            <h2>
+                이 운송을 선택하시겠습니까?
+            </h2>
+
+            <p class="confirm-description">
+                선택한 운송 정보를 다시 확인해 주세요.
+            </p>
+
+
+            <div class="confirm-info">
+
+                <div class="confirm-row">
+
+                    <span>차량번호</span>
+
+                    <strong id="confirmVehicleNumber">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="confirm-row">
+
+                    <span>품목</span>
+
+                    <strong id="confirmCargoName">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="confirm-row">
+
+                    <span>출발지</span>
+
+                    <strong id="confirmDeparture">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="confirm-row">
+
+                    <span>도착지</span>
+
+                    <strong id="confirmDestination">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="confirm-row">
+
+                    <span>출발 예정</span>
+
+                    <strong id="confirmPlannedAt">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/driver/check-in/confirm}"
+                  method="post"
+                  id="confirmForm">
+
+                <input type="hidden"
+                       name="shipmentId"
+                       id="confirmShipmentId">
+
+                <input type="hidden"
+                       name="gatewayId"
+                       th:value="${driverForm.gatewayId}">
+
+                <input type="hidden"
+                       name="vehicleNumber"
+                       th:value="${driverForm.vehicleNumber}">
+
+                <input type="hidden"
+                       name="driverName"
+                       th:value="${driverForm.driverName}">
+
+                <input type="hidden"
+                       name="driverPhone"
+                       th:value="${driverForm.driverPhone}">
+
+
+                <div class="confirm-actions">
+
+                    <button type="button"
+                            class="cancel-button"
+                            onclick="closeShipmentConfirm()">
+
+                        취소
+
+                    </button>
+
+
+                    <button type="submit"
+                            class="confirm-button">
+
+                        이 운송 선택
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 </main>
+<script th:src="@{/js/driver-check-in.js}">
+</script>
+
+<script th:inline="javascript">
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const modal =
+            document.getElementById("shipmentSelectModal");
+
+        if (modal && modal.classList.contains("open")) {
+            document.body.classList.add("modal-open");
+        }
+
+    });
+
+</script>
 
 </body>
 </html>

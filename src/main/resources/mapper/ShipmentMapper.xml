@@ -407,7 +407,6 @@
 
         INSERT INTO shipments
         (
-        gateway_id,
         rule_id,
         cargo_name,
 
@@ -420,8 +419,8 @@
         destination_longitude,
 
         planned_departure_at,
-        driver_phone,
 
+        driver_phone,
         driver_name,
         vehicle_number,
 
@@ -434,7 +433,6 @@
         )
         VALUES
         (
-        #{gatewayId},
         #{ruleId},
         #{cargoName},
 
@@ -447,10 +445,10 @@
         #{destinationLongitude},
 
         #{plannedDepartureAt},
-        #{driverPhone},
 
+        #{driverPhone},
         NULL,
-        NULL,
+        #{vehicleNumber},
 
         'READY',
         NULL,
@@ -486,64 +484,16 @@
 
     </insert>
 
-    <select id="findDriverCheckInByGatewayId" resultType="com.logisnine.monitorweb.dto.DriverCheckInView">
+
+    <select id="findEditForm"
+            resultType="com.logisnine.monitorweb.dto.ShipmentRegisterForm">
 
         SELECT
+
         s.shipment_id,
-        a.gateway_id,
+
         s.cargo_name,
-        s.departure_location,
-        s.destination_location,
-        s.planned_departure_at,
-        s.driver_phone
-
-        FROM shipment_device_assignments a
-
-        JOIN shipments s ON s.shipment_id = a.shipment_id
-
-        WHERE a.gateway_id = #{gatewayId}
-
-        AND a.unassigned_at IS NULL
-
-        ORDER BY
-        a.assigned_at DESC,
-        a.assignment_id DESC
-
-        LIMIT 1
-
-    </select>
-
-
-    <update id="updateDriverInfo" parameterType="com.logisnine.monitorweb.dto.DriverCheckInForm">
-
-        UPDATE shipments
-
-        SET
-        driver_name = #{driverName},
-        driver_phone = #{driverPhone},
-        vehicle_number = #{vehicleNumber},
-
-        updated_at = (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Seoul')
-
-        WHERE shipment_id = #{shipmentId}
-
-        AND EXISTS (
-        SELECT 1
-
-        FROM shipment_device_assignments a
-
-        WHERE a.shipment_id = shipments.shipment_id
-        AND a.gateway_id = #{gatewayId}
-        AND a.unassigned_at IS NULL
-        )
-
-    </update>
-
-    <select id="findEditForm" resultType="com.logisnine.monitorweb.dto.ShipmentRegisterForm">
-
-        SELECT
-        s.shipment_id,
-        s.cargo_name,
+        s.vehicle_number,
 
         s.departure_location,
         s.departure_latitude,
@@ -556,9 +506,7 @@
         s.planned_departure_at,
         s.driver_phone,
 
-        s.rule_id,
-
-        s.gateway_id
+        s.rule_id
 
         FROM shipments s
 
@@ -576,32 +524,16 @@
 
     </select>
 
-    <select id="findCurrentGatewayId" resultType="string">
-
-        SELECT gateway_id
-
-        FROM shipment_device_assignments
-
-        WHERE shipment_id = #{shipmentId}
-        AND unassigned_at IS NULL
-
-        ORDER BY
-        assigned_at DESC,
-        assignment_id DESC
-
-        LIMIT 1
-
-    </select>
-
-    <update id="updateShipment" parameterType="com.logisnine.monitorweb.dto.ShipmentRegisterForm">
+    <update id="updateShipment"
+            parameterType="com.logisnine.monitorweb.dto.ShipmentRegisterForm">
 
         UPDATE shipments
 
         SET
-        gateway_id = #{gatewayId},
         rule_id = #{ruleId},
 
         cargo_name = #{cargoName},
+        vehicle_number = #{vehicleNumber},
 
         departure_location = #{departureLocation},
         departure_latitude = #{departureLatitude},
@@ -622,17 +554,6 @@
 
     </update>
 
-    <update id="closeCurrentAssignment">
-
-        UPDATE shipment_device_assignments
-
-        SET unassigned_at =
-        (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Seoul')
-
-        WHERE shipment_id = #{shipmentId}
-        AND unassigned_at IS NULL
-
-    </update>
 
     <delete id="deleteAlerts">
 
@@ -690,6 +611,86 @@
         FROM readings r
 
         WHERE r.shipment_id = #{shipmentId}
+
+    </select>
+
+
+    <select id="findReadyUnassignedShipmentIdsByVehicleNumber"
+            resultType="long">
+
+        SELECT
+        shipment_id
+
+        FROM shipments
+
+        WHERE vehicle_number = #{vehicleNumber}
+
+        AND status = 'READY'
+
+        AND gateway_id IS NULL
+
+        ORDER BY
+        planned_departure_at ASC NULLS LAST,
+        shipment_id ASC
+
+        LIMIT 2
+
+    </select>
+
+
+    <update id="bindGatewayToShipment">
+
+        UPDATE shipments
+
+        SET
+        gateway_id = #{gatewayId},
+
+        driver_name = #{driverName},
+
+        driver_phone =
+        CASE
+        WHEN #{driverPhone} IS NOT NULL
+        AND #{driverPhone} != ''
+        THEN #{driverPhone}
+
+        ELSE driver_phone
+        END,
+
+        updated_at =
+        (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Seoul')
+
+        WHERE shipment_id = #{shipmentId}
+
+        AND vehicle_number = #{vehicleNumber}
+
+        AND status = 'READY'
+
+        AND gateway_id IS NULL
+
+    </update>
+
+    <select id="findDriverShipmentCandidates"
+            resultType="com.logisnine.monitorweb.dto.DriverShipmentCandidateView">
+
+        SELECT
+        shipment_id,
+        vehicle_number,
+        cargo_name,
+        departure_location,
+        destination_location,
+        planned_departure_at
+
+        FROM shipments
+
+        WHERE vehicle_number = #{vehicleNumber}
+
+        AND status = 'READY'
+
+        AND gateway_id IS NULL
+
+        ORDER BY
+        planned_departure_at ASC NULLS LAST,
+        shipment_id ASC
 
     </select>
 </mapper>

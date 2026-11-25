@@ -103,7 +103,7 @@
             </h1>
 
             <p>
-                운송 정보와 Gateway를 등록해 주세요.
+                운송 정보와 차량 정보를 등록해 주세요.
             </p>
 
         </div>
@@ -194,7 +194,27 @@
 
             </div>
 
+            <div class="field-group">
+
+                <label for="vehicleNumber">
+                    차량번호
+                </label>
+
+                <input type="text"
+                       id="vehicleNumber"
+                       th:field="*{vehicleNumber}"
+                       placeholder="예: 12가3456"
+                       required>
+
+                <div class="field-help">
+                    Gateway 연결 시 차량번호를 기준으로 운송건을 확인합니다.
+                </div>
+
+            </div>
+
         </section>
+
+
 
 
 
@@ -372,51 +392,9 @@
 
                 </div>
 
-                <span>장비 및 판정 기준</span>
+                <span>판정 기준</span>
 
             </div>
-
-
-
-            <div class="field-group route-field">
-
-                <label for="gatewayId">
-                    Gateway 배정
-                </label>
-
-
-                <div class="select-wrapper">
-
-                    <select id="gatewayId"
-                            th:field="*{gatewayId}"
-                            required>
-
-                        <option value="">
-                            Gateway를 선택해 주세요.
-                        </option>
-
-
-                        <option th:each="gateway : ${gateways}"
-                                th:value="${gateway.gatewayId}"
-                                th:text="${gateway.gatewayName != null
-                                    ? gateway.gatewayId
-                                      + ' · '
-                                      + gateway.gatewayName
-                                    : gateway.gatewayId}">
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="field-help">
-                    현재 다른 운송에 배정되지 않은 Gateway만 표시됩니다.
-                </div>
-
-            </div>
-
-
 
             <div class="field-group route-field">
 

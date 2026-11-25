@@ -1,9 +1,7 @@
 package com.logisnine.monitorweb.mapper;
 
-import com.logisnine.monitorweb.domain.Shipment;
-import com.logisnine.monitorweb.dto.DriverCheckInForm;
-import com.logisnine.monitorweb.dto.DriverCheckInView;
 import com.logisnine.monitorweb.dto.DashboardEventView;
+import com.logisnine.monitorweb.dto.DriverShipmentCandidateView;
 import com.logisnine.monitorweb.dto.JudgementRuleView;
 import com.logisnine.monitorweb.dto.LatestReadingView;
 import com.logisnine.monitorweb.dto.MapAlertView;
@@ -57,19 +55,11 @@ public interface ShipmentMapper {
             @Param("gatewayId") String gatewayId
     );
 
-    DriverCheckInView findDriverCheckInByGatewayId(@Param("gatewayId") String gatewayId);
-
-    int updateDriverInfo(DriverCheckInForm form);
-
     ShipmentRegisterForm findEditForm(@Param("shipmentId") Long shipmentId);
 
     String findShipmentStatus(@Param("shipmentId") Long shipmentId);
 
-    String findCurrentGatewayId(@Param("shipmentId") Long shipmentId);
-
     int updateShipment(ShipmentRegisterForm form);
-
-    int closeCurrentAssignment(@Param("shipmentId") Long shipmentId);
 
     int deleteAlerts(@Param("shipmentId") Long shipmentId);
 
@@ -78,4 +68,14 @@ public interface ShipmentMapper {
     int deleteShipment(@Param("shipmentId") Long shipmentId);
 
     ShipmentReportSensorSummaryView findReportSensorSummary(@Param("shipmentId") Long shipmentId);
+
+    List<Long> findReadyUnassignedShipmentIdsByVehicleNumber(@Param("vehicleNumber") String vehicleNumber);
+
+    int bindGatewayToShipment(@Param("shipmentId") Long shipmentId,
+                              @Param("gatewayId") String gatewayId,
+                              @Param("vehicleNumber") String vehicleNumber,
+                              @Param("driverName") String driverName,
+                              @Param("driverPhone") String driverPhone);
+
+    List<DriverShipmentCandidateView> findDriverShipmentCandidates(@Param("vehicleNumber") String vehicleNumber);
 }

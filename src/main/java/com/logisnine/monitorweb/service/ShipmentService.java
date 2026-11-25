@@ -27,8 +27,6 @@ public class ShipmentService {
 
     private final ShipmentMapper shipmentMapper;
 
-    private final GatewayService gatewayService;
-
     private static final long RECEIVE_DELAY_MINUTES = 10;
     private static final long RECEIVE_DISCONNECTED_MINUTES = 30;
 
@@ -135,9 +133,9 @@ public class ShipmentService {
     @Transactional
     public Long registerShipment(ShipmentRegisterForm form) {
 
-        shipmentMapper.insertShipment(form);
+        form.setVehicleNumber(normalizeVehicleNumber(form.getVehicleNumber()));
 
-        shipmentMapper.insertDeviceAssignment(form.getShipmentId(), form.getGatewayId());
+        shipmentMapper.insertShipment(form);
 
         return form.getShipmentId();
     }
@@ -157,31 +155,12 @@ public class ShipmentService {
             throw new IllegalStateException("운송 대기 상태에서만 수정할 수 있습니다.");
         }
 
-        boolean available = gatewayService.isGatewayAvailableForShipment(form.getGatewayId(), shipmentId);
-
-        if (!available) {
-            throw new IllegalStateException("이미 다른 운송에 배정된 Gateway입니다.");
-        }
-
-        String currentGatewayId = shipmentMapper.findCurrentGatewayId(shipmentId);
+        form.setVehicleNumber(normalizeVehicleNumber(form.getVehicleNumber()));
 
         int updated = shipmentMapper.updateShipment(form);
 
         if (updated == 0) {
-
             throw new IllegalStateException("운송정보를 수정할 수 없습니다.");
-        }
-
-
-        /*
-         * Gateway가 변경된 경우에만
-         * 배정 이력을 변경한다.
-         */
-        if (!java.util.Objects.equals(currentGatewayId, form.getGatewayId())) {
-
-            shipmentMapper.closeCurrentAssignment(shipmentId);
-
-            shipmentMapper.insertDeviceAssignment(shipmentId, form.getGatewayId());
         }
     }
 
@@ -312,5 +291,14 @@ public class ShipmentService {
                 .sensorSummary(sensorSummary)
                 .elapsedTime(elapsedTime)
                 .build();
+    }
+
+    private String normalizeVehicleNumber(String vehicleNumber) {
+
+        if (vehicleNumber == null) {
+            return null;
+        }
+
+        return vehicleNumber.replaceAll("\\s+", "").trim().toUpperCase();
     }
 }

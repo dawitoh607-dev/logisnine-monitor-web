@@ -8,7 +8,6 @@ import com.logisnine.monitorweb.dto.ShipmentDetailView;
 import com.logisnine.monitorweb.dto.ShipmentListView;
 import com.logisnine.monitorweb.dto.ShipmentRegisterForm;
 import com.logisnine.monitorweb.dto.ShipmentReportView;
-import com.logisnine.monitorweb.service.GatewayService;
 import com.logisnine.monitorweb.service.ShipmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -31,14 +30,11 @@ import java.util.List;
 public class ShipmentController {
 
     private final ShipmentService shipmentService;
-    private final GatewayService gatewayService;
 
     @GetMapping("/register")
     public String registerForm(Model model) {
 
         model.addAttribute("shipmentForm", new ShipmentRegisterForm());
-
-        model.addAttribute("gateways", gatewayService.findAvailableGateways());
 
         model.addAttribute("rules", shipmentService.findEnabledRules());
 
@@ -176,7 +172,6 @@ public class ShipmentController {
         }
 
         model.addAttribute("shipmentForm", form);
-        model.addAttribute("gateways", gatewayService.findAvailableGatewaysForShipment(shipmentId));
         model.addAttribute("rules", shipmentService.findEnabledRules());
 
         return "shipment/shipment-edit";

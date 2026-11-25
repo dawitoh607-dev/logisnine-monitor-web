@@ -25,7 +25,7 @@ public class ShipmentRegisterForm {
 
     private String driverPhone;
 
-    private String gatewayId;
+    private String vehicleNumber;
 
     private Long ruleId;
 }
